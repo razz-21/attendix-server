@@ -10,7 +10,7 @@ await connectDB();
 
 const welcomeStrings = [
   'Hello World!',
-  'Welcome to the ATTENDIX SERVER!',
+  'Welcome to the ATTENDIX SERVER API!',
 ];
 
 app.use('*', cors({
