@@ -1,1 +1,0 @@
-export * from './get-paginated-users.route.js';
