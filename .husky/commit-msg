@@ -1,0 +1,14 @@
+#!/usr/bin/env sh
+
+msg_file="$1"
+msg="$(cat "$msg_file")"
+
+# Enforce: type(scope): message
+pattern='^[a-z]+\([^)]+\): .+'
+
+if ! printf "%s" "$msg" | grep -Eq "$pattern"; then
+  echo "Invalid commit message format."
+  echo "Expected: type(scope): message"
+  echo "Example: feat(users): add pagination support"
+  exit 1
+fi

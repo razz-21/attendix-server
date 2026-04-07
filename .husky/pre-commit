@@ -1,0 +1,3 @@
+#!/usr/bin/env sh
+# No pre-commit checks configured yet.
+exit 0
