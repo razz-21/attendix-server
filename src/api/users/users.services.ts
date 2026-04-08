@@ -1,4 +1,4 @@
-import { getDb } from "@config/db.config.js";
+import { getDb } from '../../config/db.config.js';
 import { GetPaginatedUsers, GetUser, PatchUser, PostUser } from "./users.model.js";
 
 const USERS_COLLECTION = 'users';
