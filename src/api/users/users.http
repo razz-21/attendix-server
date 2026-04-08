@@ -12,9 +12,10 @@ Content-Type: application/json
 
 {
   "rfid": "1234567890",
-  "username": "test",
+  "username": "test78",
   "password": "test",
   "firstname": "Test",
+  "email": "test@test.com",
   "lastname": "Test",
   "department": "Test",
   "status": "active",

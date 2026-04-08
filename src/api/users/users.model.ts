@@ -8,34 +8,41 @@ export const UserSchema = z.object({
     description: 'The unique identifier for the user',
     example: '123e4567-e89b-12d3-a456-426614174000',
   }),
-  rfid: z.string({ error: 'RFID is required' })
+  rfid: z.string('RFID is required')
     .trim()
     .min(1, 'RFID is required')
     .openapi({
       description: 'The RFID of the user',
       example: '1234567890',
     }),
-  firstname: z.string({ error: 'First name is required' })
+  firstname: z.string('First name is required')
     .trim()
     .min(1, 'First name is required')
     .openapi({
       description: 'The first name of the user',
       example: 'John',
     }),
-  lastname: z.string({ error: 'Last name is required' })
+  lastname: z.string('Last name is required')
     .min(1, 'Last name is required')
     .openapi({
       description: 'The last name of the user',
       example: 'Doe',
     }),
-  department: z.string({ error: 'Department is required' })
+  email: z
+    .string('Email is required')
+    .pipe(z.email('Invalid email'))
+    .openapi({
+      description: 'The email of the user',
+      example: 'john.doe@example.com',
+    }),
+  department: z.string('Department is required')
     .trim()
     .min(1, 'Department is required')
     .openapi({
       description: 'The department of the user',
       example: 'College of Information Technology',
     }),
-  role: z.string({ error: 'Role is required' })
+  role: z.string('Role is required')
     .trim()
     .min(1, 'Role is required')
     .pipe(UserRoleSchema)
@@ -43,21 +50,21 @@ export const UserSchema = z.object({
       description: 'The role of the user',
       example: 'admin',
     }),
-  username: z.string({ error: 'Username is required' })
+  username: z.string('Username is required')
     .trim()
     .min(1, 'Username is required')
     .openapi({
       description: 'The username of the user',
       example: 'john.doe',
     }),
-  password: z.string({ error: 'Password is required' })
+  password: z.string('Password is required')
     .trim()
     .min(1, 'Password is required')
     .openapi({
       description: 'The password of the user',
       example: 'password',
     }),
-  status: z.string({ error: 'Status is required' })
+  status: z.string('Status is required')
     .trim()
     .min(1, 'Status is required')
     .pipe(UserStatusSchema)
