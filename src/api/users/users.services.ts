@@ -1,4 +1,3 @@
-import { ObjectId } from "mongodb";
 import { getDb } from "../../config/db.config.js";
 import { GetPaginatedUsers, GetUser, PatchUser, PostUser } from "./users.model.js";
 

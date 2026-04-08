@@ -102,6 +102,7 @@ export const DeleteUserSchema = z.object({
 export type User = z.infer<typeof UserSchema>;
 export type GetUser = z.infer<typeof GetUserSchema>;
 export type GetPaginatedUsers = z.infer<typeof GetPaginatedUsersSchema>;
+export type GetPaginatedUserParams = z.infer<typeof GetPaginatedUserParamsSchema>;
 export type PostUser = z.infer<typeof PostUserSchema>;
 export type PatchUser = z.infer<typeof PatchUserSchema>;
 export type DeleteUser = z.infer<typeof DeleteUserSchema>;
