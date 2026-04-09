@@ -9,16 +9,7 @@
     "jsx": "react-jsx",
     "jsxImportSource": "hono/jsx",
     "outDir": "./dist",
-    "baseUrl": ".",
-    "paths": {
-      "@/*": ["./src/*"],
-      "@api/*": ["./src/api/*"],
-      "@config/*": ["./src/config/*"],
-      "@constants/*": ["./src/constants/*"],
-      "@functions/*": ["./src/functions/*"],
-      "@middleware/*": ["./src/middleware/*"],
-      "@utils/*": ["./src/utils/*"],
-    }
+    "baseUrl": "."
   },
   "exclude": ["node_modules"]
 }
