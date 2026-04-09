@@ -1,4 +1,4 @@
-import { getExpirationTimestamp } from "@/functions/get-expiration-timestamp.js";
+import { getExpirationTimestamp } from "@functions/get-expiration-timestamp.js";
 import { getCookie, setCookie } from "hono/cookie";
 import { sign, verify } from "hono/jwt";
 import type { Context, Next } from "hono";

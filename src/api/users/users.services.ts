@@ -1,6 +1,6 @@
 import { getDb } from '../../config/db.config.js';
 import { GetPaginatedUsers, GetUser, PatchUser, PostUser } from "./users.model.js";
-import { COLLECTIONS } from "@/constants/collectionts.constant.js";
+import { COLLECTIONS } from "@constants/collectionts.constant.js";
 
 export async function getUserByIdService(id: string): Promise<GetUser | null> {
   try {
