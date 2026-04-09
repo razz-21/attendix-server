@@ -1,13 +1,13 @@
 import { getUsers, getUserById, createUser, updateUser, deleteUser, isUsernameExists, isEmailExists } from "../users.controller.js";
 import { OpenAPIHono } from "@hono/zod-openapi";
-import { GetPaginatedUsersRoute } from "./get-paginated-users.route.js";
-import { GetUserByIdRoute } from "./get-user-by-id.route.js";
-import { CreateUserRoute } from "./create-user.route.js";
-import { UpdateUserRoute } from "./update-user.route.js";
-import { DeleteUserRoute } from "./delete-user.route.js";
-import { authMiddleware } from "@middleware/auth.middleware.js";
-import { EmailExistsRoute } from "./email-exist.route.js";
-import { UsernameExistsRoute } from "./username-exist.route.js";
+import { GetPaginatedUsersRoute } from "./get-paginated-users.route";
+import { GetUserByIdRoute } from "./get-user-by-id.route";
+import { CreateUserRoute } from "./create-user.route";
+import { UpdateUserRoute } from "./update-user.route";
+import { DeleteUserRoute } from "./delete-user.route";
+import { EmailExistsRoute } from "./email-exist.route";
+import { UsernameExistsRoute } from "./username-exist.route";
+import { authMiddleware } from "../../../middleware/auth.middleware";
 
 const usersRoutes = new OpenAPIHono();
 
