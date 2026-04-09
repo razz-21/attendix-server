@@ -11,13 +11,13 @@ POST http://localhost:3000/api/v1/users
 Content-Type: application/json
 
 {
-  "rfid": "1234567890",
-  "username": "test78",
-  "password": "test",
-  "firstname": "Test",
-  "email": "test@test.com",
-  "lastname": "Test",
-  "department": "Test",
+  "rfid": "112233",
+  "username": "razz22111",
+  "password": "admin123",
+  "firstname": "Ernesto",
+  "email": "razz.ernesto@attendix.com",
+  "lastname": "Razo",
+  "department": "College of Information Technology",
   "status": "active",
   "role": "admin"
 }

@@ -85,6 +85,7 @@ export const UserSchema = z.object({
 }).openapi('User');
 
 export const GetUserSchema = UserSchema.omit({ password: true }).openapi('GetUser');
+export const GetUserWithPasswordSchema = UserSchema.openapi('GetUserWithPassword');
 export const GetPaginatedUserParamsSchema = z.object({
   page: z.number().optional(),
   limit: z.number().optional(),
@@ -105,11 +106,20 @@ export const PatchUserSchema = UserSchema
 export const DeleteUserSchema = z.object({
   id: z.string(),
 }).openapi('DeleteUser');
+export const UsernameExistsSchema = z.object({
+  exists: z.boolean(),
+}).openapi('UsernameExists');
+export const EmailExistsSchema = z.object({
+  exists: z.boolean(),
+}).openapi('EmailExists');
 
 export type User = z.infer<typeof UserSchema>;
 export type GetUser = z.infer<typeof GetUserSchema>;
+export type GetUserWithPassword = z.infer<typeof GetUserWithPasswordSchema>;
 export type GetPaginatedUsers = z.infer<typeof GetPaginatedUsersSchema>;
 export type GetPaginatedUserParams = z.infer<typeof GetPaginatedUserParamsSchema>;
 export type PostUser = z.infer<typeof PostUserSchema>;
 export type PatchUser = z.infer<typeof PatchUserSchema>;
 export type DeleteUser = z.infer<typeof DeleteUserSchema>;
+export type UsernameExists = z.infer<typeof UsernameExistsSchema>;
+export type EmailExists = z.infer<typeof EmailExistsSchema>;

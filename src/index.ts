@@ -1,8 +1,10 @@
 import { connectDB } from './config/db.config.js'
-import usersRoutes from './api/users/routes/users.route.js'
+import usersRoutes from './api/users/routes/users.routes.js'
 import { cors } from 'hono/cors';
 import 'hono';
 import { OpenAPIHono } from '@hono/zod-openapi';
+import authRoutes from './api/auth/routes/auth.routes.js';
+import meRoutes from './api/me/routes/me.routes.js';
 
 const app = new OpenAPIHono();
 
@@ -22,6 +24,8 @@ app.get('/', (c) => {
   return c.text(welcomeStrings.join('\n\n'))
 });
 
+app.route('/api/v1/auth', authRoutes);
+app.route('/api/v1/me', meRoutes);
 app.route('/api/v1/users', usersRoutes);
 
 app.doc('/docs', {
