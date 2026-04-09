@@ -1,4 +1,4 @@
-import { getDb } from "@/config/db.config";
+import { getDb } from "@config/db.config";
 import { GetUser, GetUserWithPassword } from "../users/users.model";
 import { compare } from "bcrypt-ts";
 import { COLLECTIONS } from "@constants/collectionts.constant";
