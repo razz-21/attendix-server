@@ -1,5 +1,5 @@
 import { z } from "@hono/zod-openapi";
-import { UserSchema } from "../users/users.model";
+import { UserSchema } from "../users/users.model.js";
 
 export const TokenPayloadSchema = z.object({
   user: UserSchema.omit({ password: true }).openapi('User'),

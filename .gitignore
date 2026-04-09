@@ -30,3 +30,7 @@ lerna-debug.log*
 
 # dist
 dist/
+
+# lock files
+package-lock.json
+bun.lock

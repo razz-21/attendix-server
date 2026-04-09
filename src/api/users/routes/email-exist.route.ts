@@ -1,5 +1,5 @@
 import { createRoute, z } from "@hono/zod-openapi";
-import { EmailExistsSchema } from "../users.model";
+import { EmailExistsSchema } from "../users.model.js";
 
 
 export const EmailExistsRoute = createRoute({

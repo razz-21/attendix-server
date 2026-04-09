@@ -1,5 +1,5 @@
 import { createRoute } from "node_modules/@hono/zod-openapi/dist/index.cjs";
-import { EmailLoginResponseSchema, EmailLoginSchema } from "../auth.model";
+import { EmailLoginResponseSchema, EmailLoginSchema } from "../auth.model.js";
 
 export const EmailLoginRoute = createRoute({
   path: '/email-login',
