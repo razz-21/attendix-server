@@ -1,7 +1,7 @@
-import { getDb } from "@/config/db.config.js";
-import { GetUser, GetUserWithPassword } from "../users/users.model.js";
+import { getDb } from "@/config/db.config";
+import { GetUser, GetUserWithPassword } from "../users/users.model";
 import { compare } from "bcrypt-ts";
-import { COLLECTIONS } from "@constants/collectionts.constant.js";
+import { COLLECTIONS } from "@constants/collectionts.constant";
 import { sign } from "hono/jwt";
 
 export async function getUserByEmailOrUsername(email?: string, username?: string): Promise<GetUserWithPassword | null> {

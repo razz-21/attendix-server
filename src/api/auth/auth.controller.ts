@@ -1,10 +1,10 @@
-import { EmailLogin, EmailLoginResponse, EmailLoginSchema } from "./auth.model.js";
+import { EmailLogin, EmailLoginResponse, EmailLoginSchema } from "./auth.model";
 import { Context } from "hono";
 import { ZodError } from "zod";
-import { getUserByEmailOrUsername, isUserPasswordValid, signAccessToken, signRefreshToken } from "./auth.service.js";
-import { getExpirationTimestamp } from "@functions/get-expiration-timestamp.js";
+import { getUserByEmailOrUsername, isUserPasswordValid, signAccessToken, signRefreshToken } from "./auth.service";
+import { getExpirationTimestamp } from "@functions/get-expiration-timestamp";
 import { deleteCookie, setCookie } from "hono/cookie";
-import { AUTH_COOKIES } from "@constants/auth.constant.js";
+import { AUTH_COOKIES } from "@constants/auth.constant";
 
 export async function emailLogin(c: Context) {
   try {

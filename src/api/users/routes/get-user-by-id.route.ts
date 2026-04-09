@@ -1,5 +1,5 @@
 import { createRoute, z } from "@hono/zod-openapi";
-import { GetUserSchema } from "../users.model.js";
+import { GetUserSchema } from "../users.model";
 
 export const GetUserByIdRoute = createRoute({
   path: ':id',

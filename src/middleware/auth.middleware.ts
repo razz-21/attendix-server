@@ -1,9 +1,9 @@
-import { getExpirationTimestamp } from "@functions/get-expiration-timestamp.js";
+import { getExpirationTimestamp } from "@functions/get-expiration-timestamp";
 import { getCookie, setCookie } from "hono/cookie";
 import { sign, verify } from "hono/jwt";
 import type { Context, Next } from "hono";
-import { AUTH_COOKIES } from "@constants/auth.constant.js";
-import { TokenPayload } from "@api/auth/auth.model.js";
+import { AUTH_COOKIES } from "@constants/auth.constant";
+import { TokenPayload } from "@api/auth/auth.model";
 
 export async function authMiddleware(c: Context, next: Next) {
   const accessTokenSecret = process.env.ACCESS_TOKEN_SECRET;

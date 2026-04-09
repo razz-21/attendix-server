@@ -7,8 +7,8 @@ import {
   isEmailExistsService,
   isUsernameExistsService,
   updateUserService,
-} from "./users.services.js";
-import { PatchUser, PatchUserSchema, PostUser, PostUserSchema } from "./users.model.js";
+} from "./users.services";
+import { PatchUser, PatchUserSchema, PostUser, PostUserSchema } from "./users.model";
 import { hash } from 'bcrypt-ts';
 import { ZodError } from "zod";
 

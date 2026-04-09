@@ -1,5 +1,5 @@
 import { createRoute, z } from "@hono/zod-openapi";
-import { GetPaginatedUserParamsSchema, GetPaginatedUsersSchema } from "../users.model.js";
+import { GetPaginatedUserParamsSchema, GetPaginatedUsersSchema } from "../users.model";
 
 export const GetPaginatedUsersRoute = createRoute({
   path: '',

@@ -1,10 +1,10 @@
-import { connectDB } from './config/db.config.js'
-import usersRoutes from './api/users/routes/users.routes.js'
+import { connectDB } from './config/db.config'
+import usersRoutes from './api/users/routes/users.routes'
 import { cors } from 'hono/cors';
 import 'hono';
 import { OpenAPIHono } from '@hono/zod-openapi';
-import authRoutes from './api/auth/routes/auth.routes.js';
-import meRoutes from './api/me/routes/me.routes.js';
+import authRoutes from './api/auth/routes/auth.routes';
+import meRoutes from './api/me/routes/me.routes';
 
 const app = new OpenAPIHono();
 
