@@ -1,5 +1,13 @@
 import { Context } from "hono";
-import { createUserService, deleteUserService, getUserByIdService, getUsersService, isUsernameExistsService, updateUserService } from "./users.services.js";
+import {
+  createUserService,
+  deleteUserService,
+  getUserByIdService,
+  getUsersService,
+  isEmailExistsService,
+  isUsernameExistsService,
+  updateUserService,
+} from "./users.services.js";
 import { PatchUser, PatchUserSchema, PostUser, PostUserSchema } from "./users.model.js";
 import { hash } from 'bcrypt-ts';
 import { ZodError } from "zod";
@@ -48,6 +56,10 @@ export async function createUser(c: Context) {
       return c.json({ error: 'Username already exists' }, 400);
     }
 
+    if (await isEmailExistsService(payload.email)) {
+      return c.json({ error: 'Email already exists' }, 400);
+    }
+
     const hashedPassword = await hash(payload.password, 12);
     
     const body = {
@@ -80,6 +92,10 @@ export async function updateUser(c: Context) {
       return c.json({ error: 'Username already exists' }, 400);
     }
 
+    if (payload.email && await isEmailExistsService(payload.email)) {
+      return c.json({ error: 'Email already exists' }, 400);
+    }
+
     const body = {
       ...payload,
       updated_at: new Date().toISOString(),
@@ -105,6 +121,38 @@ export async function deleteUser(c: Context) {
     return c.json(result);
   } catch (error) {
     const errorMessage = error instanceof Error ? error.message : 'Failed to delete user';
+    return c.json({ error: errorMessage }, 500);
+  }
+}
+
+export async function isUsernameExists(c: Context) {
+  try {
+    const username = c.req.param('username');
+    if (!username) {
+      return c.json({ error: 'Username is required' }, 400);
+    }
+    const result = await isUsernameExistsService(username);
+    return c.json({
+      exists: result,
+    });
+  } catch (error) {
+    const errorMessage = error instanceof Error ? error.message : 'Failed to check if username exists';
+    return c.json({ error: errorMessage }, 500);
+  }
+}
+
+export async function isEmailExists(c: Context) {
+  try {
+    const email = c.req.param('email');
+    if (!email) {
+      return c.json({ error: 'Email is required' }, 400);
+    }
+    const result = await isEmailExistsService(email);
+    return c.json({
+      exists: result,
+    });
+  } catch (error) {
+    const errorMessage = error instanceof Error ? error.message : 'Failed to check if email exists';
     return c.json({ error: errorMessage }, 500);
   }
 }

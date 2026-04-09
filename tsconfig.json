@@ -13,6 +13,9 @@
       "@/*": ["./src/*"],
       "@api/*": ["./src/api/*"],
       "@config/*": ["./src/config/*"],
+      "@constants/*": ["./src/constants/*"],
+      "@functions/*": ["./src/functions/*"],
+      "@middleware/*": ["./src/middleware/*"],
       "@utils/*": ["./src/utils/*"],
     }
   },
