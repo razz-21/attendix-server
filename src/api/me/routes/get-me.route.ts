@@ -1,4 +1,4 @@
-import { GetUserSchema } from "@/api/users/users.model";
+import { GetUserSchema } from "../../users/users.model";
 import { createRoute } from "@hono/zod-openapi";
 
 export const GetMeRoute = createRoute({

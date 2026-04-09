@@ -1,4 +1,4 @@
-import { connectDB } from '@config/db.config'
+import { connectDB } from './config/db.config'
 import usersRoutes from './api/users/routes/users.routes'
 import { cors } from 'hono/cors';
 import 'hono';
