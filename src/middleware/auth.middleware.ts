@@ -65,7 +65,7 @@ async function verifyToken(token: string, secret: string): Promise<TokenPayload>
 async function fallbackWithRefreshToken(c: Context, next: Next, refreshToken: string, accessTokenSecret: string, refreshTokenSecret: string) {
   const refreshPayload = await verifyToken(refreshToken, refreshTokenSecret);
 
-  if (isExpired(refreshPayload.exp)) {
+  if (isExpired(refreshPayload.refresh_exp)) {
     return c.json({ error: "Session expired. Please sign in again." }, 401);
   }
 
@@ -73,6 +73,7 @@ async function fallbackWithRefreshToken(c: Context, next: Next, refreshToken: st
   const newAccessPayload: TokenPayload = {
     user: refreshPayload.user,
     exp: getExpirationTimestamp(accessTokenExpiresInMinutes),
+    refresh_exp: refreshPayload.refresh_exp,
   };
 
   const newAccessToken = await sign(newAccessPayload, accessTokenSecret, "HS256");

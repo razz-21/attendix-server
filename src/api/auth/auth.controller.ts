@@ -27,6 +27,7 @@ export async function emailLogin(c: Context) {
     const userPayload = {
       user: user,
       exp: getExpirationTimestamp(Number(process.env.ACCESS_TOKEN_EXPIRES_IN_MINUTES ?? "15")),
+      refresh_exp: getExpirationTimestamp(Number(process.env.REFRESH_TOKEN_EXPIRES_IN_MINUTES ?? "10080")),
     };
     const accessToken = await signAccessToken(userPayload);
     const refreshToken = await signRefreshToken(userPayload);

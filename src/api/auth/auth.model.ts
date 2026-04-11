@@ -7,6 +7,10 @@ export const TokenPayloadSchema = z.object({
     description: 'The expiration time of the token',
     example: 15,
   }),
+  refresh_exp: z.number('Refresh expires in is required').openapi({
+    description: 'The expiration time of the refresh token',
+    example: 10080,
+  }),
 }).openapi('TokenPayload');
 
 export const EmailLoginSchema = z.object({
