@@ -3,7 +3,7 @@ import { EmailExistsSchema } from "../users.model.js";
 
 
 export const EmailExistsRoute = createRoute({
-  path: '/email-exists',
+  path: '/email-exists/:email',
   method: 'get',
   request: {
     params: z.object({

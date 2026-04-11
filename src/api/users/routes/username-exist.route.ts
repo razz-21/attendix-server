@@ -2,7 +2,7 @@ import { createRoute, z } from "@hono/zod-openapi";
 import { UsernameExistsSchema } from "../users.model.js";
 
 export const UsernameExistsRoute = createRoute({
-  path: '/username-exists',
+  path: '/username-exists/:username',
   method: 'get',
   request: {
     params: z.object({

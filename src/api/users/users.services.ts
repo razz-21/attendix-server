@@ -1,5 +1,13 @@
+import type { Filter } from 'mongodb';
 import { getDb } from '../../config/db.config.js';
-import { GetPaginatedUsers, GetUser, PatchUser, PostUser } from "./users.model.js";
+import {
+  GetPaginatedUsers,
+  GetUser,
+  PatchUser,
+  PostUser,
+  UserRoleSchema,
+  UserStatusSchema,
+} from "./users.model.js";
 import { COLLECTIONS } from "../../constants/collectionts.constant.js";
 
 export async function getUserByIdService(id: string): Promise<GetUser | null> {
@@ -13,16 +21,35 @@ export async function getUserByIdService(id: string): Promise<GetUser | null> {
   }
 }
 
-export async function getUsersService(page: number, limit: number): Promise<GetPaginatedUsers> {
+export async function getUsersService(page: number, limit: number, q?: string, status?: string, role?: string): Promise<GetPaginatedUsers> {
   try {
     const db = getDb();
     const usersCollection = db.collection<GetUser>(COLLECTIONS.USERS);
+    const trimmed = q?.trim();
+    const filter: Filter<GetUser> = trimmed
+      ? {
+          $or: [
+            { rfid: { $regex: trimmed, $options: 'i' } },
+            { firstname: { $regex: trimmed, $options: 'i' } },
+            { lastname: { $regex: trimmed, $options: 'i' } },
+          ],
+        }
+      : {};
+
+    const statusResult = status ? UserStatusSchema.safeParse(status) : null;
+    if (statusResult?.success) {
+      filter.status = statusResult.data;
+    }
+    const roleResult = role ? UserRoleSchema.safeParse(role) : null;
+    if (roleResult?.success) {
+      filter.role = roleResult.data;
+    }
     const users = await usersCollection
-      .find<GetUser>({}, { projection: { password: 0 } })
+      .find<GetUser>(filter, { projection: { password: 0 } })
       .skip((page - 1) * limit)
       .limit(limit)
       .toArray();
-    const total = await usersCollection.countDocuments();
+    const total = await usersCollection.countDocuments(filter);
     return {
       data: users,
       total,

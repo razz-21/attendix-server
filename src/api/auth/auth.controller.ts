@@ -38,7 +38,7 @@ export async function emailLogin(c: Context) {
     setCookie(c, AUTH_COOKIES.ACCESS_TOKEN, accessToken, {
       httpOnly: true,
       secure: isProduction,
-      sameSite: "Strict",
+      sameSite: isProduction ? "Strict" : "None",
       maxAge: accessTokenExpiresInMinutes * 60,
       path: "/",
     });
@@ -46,7 +46,7 @@ export async function emailLogin(c: Context) {
     setCookie(c, AUTH_COOKIES.REFRESH_TOKEN, refreshToken, {
       httpOnly: true,
       secure: isProduction,
-      sameSite: "Strict",
+      sameSite: isProduction ? "Strict" : "None",
       maxAge: refreshTokenExpiresInMinutes * 60,
       path: "/",
     });

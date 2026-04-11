@@ -81,7 +81,7 @@ async function fallbackWithRefreshToken(c: Context, next: Next, refreshToken: st
   setCookie(c, AUTH_COOKIES.ACCESS_TOKEN, newAccessToken, {
     httpOnly: true,
     secure: isProduction,
-    sameSite: "Strict",
+    sameSite: isProduction ? "Strict" : "None",
     maxAge: accessTokenExpiresInMinutes * 60,
     path: "/",
   });
