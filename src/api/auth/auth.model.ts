@@ -14,22 +14,20 @@ export const TokenPayloadSchema = z.object({
 }).openapi('TokenPayload');
 
 export const EmailLoginSchema = z.object({
-  email: z.string('Email is required')
-  .pipe(z.email('Invalid email'))
+  email: z.string()
   .optional()
   .openapi({
       description: 'The email of the user',
       example: 'john.doe@example.com',
   }),
-  username: z.string('Username is required')
+  username: z.string()
   .trim()
-  .min(1, 'Username is required')
   .optional()
   .openapi({
       description: 'The username of the user',
       example: 'john.doe',
   }),
-  password: z.string().min(8).openapi({
+  password: z.string().openapi({
       description: 'The password of the user',
       example: 'password',
   }),
