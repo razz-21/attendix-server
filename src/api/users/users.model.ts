@@ -72,6 +72,14 @@ export const UserSchema = z.object({
       description: 'The status of the user',
       example: 'active',
     }),
+  workspace_id: z.string('Workspace ID is required')
+    .trim()
+    .min(1, 'Workspace ID is required')
+    .nullable()
+    .openapi({
+      description: 'The workspace ID of the user',
+      example: '1234567890',
+    }),
   created_at: z.iso.datetime().default(new Date().toISOString())
     .openapi({
       description: 'The date and time the user was created',
