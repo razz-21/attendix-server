@@ -1,6 +1,6 @@
 import { Context } from "hono";
-import { PostWorkspace, PostWorkspaceSchema } from "../workspace.model";
-import { createWorkspace } from "../workspace.service";
+import { PostWorkspace, PostWorkspaceSchema } from "../workspace.model.js";
+import { createWorkspace } from "../workspace.service.js";
 import { ZodError } from "zod";
 
 export async function postWorkspace(c: Context) {

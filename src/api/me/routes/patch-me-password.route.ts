@@ -1,5 +1,5 @@
 import { createRoute, z } from "@hono/zod-openapi";
-import { PatchMePasswordSchema } from "../me.model";
+import { PatchMePasswordSchema } from "../me.model.js";
 
 
 export const PatchMePasswordRoute = createRoute({

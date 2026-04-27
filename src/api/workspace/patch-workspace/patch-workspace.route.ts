@@ -1,5 +1,5 @@
 import { createRoute, z } from "@hono/zod-openapi";
-import { GetWorkspaceSchema, PatchWorkspaceSchema } from "../workspace.model";
+import { GetWorkspaceSchema, PatchWorkspaceSchema } from "../workspace.model.js";
 
 export const PatchWorkspaceRoute = createRoute({
   path: ':id',

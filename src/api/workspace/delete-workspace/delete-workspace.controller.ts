@@ -1,5 +1,5 @@
 import { Context } from "hono";
-import { deleteWorkspaceById } from "../workspace.service";
+import { deleteWorkspaceById } from "../workspace.service.js";
 
 export async function deleteWorkspace(c: Context) {
   try {

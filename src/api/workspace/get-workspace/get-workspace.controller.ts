@@ -1,5 +1,5 @@
 import { Context } from "hono";
-import { getWorkspaceById } from "../workspace.service";
+import { getWorkspaceById } from "../workspace.service.js";
 
 export async function getWorkspace(c: Context) {
   try {

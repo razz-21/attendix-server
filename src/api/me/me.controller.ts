@@ -1,9 +1,9 @@
 import { Context } from "hono";
-import { GetUser } from "../users/users.model";
-import { PatchMePassword, PatchMePasswordSchema } from "./me.model";
+import { GetUser } from "../users/users.model.js";
+import { PatchMePassword, PatchMePasswordSchema } from "./me.model.js";
 import { ZodError } from "zod";
 import { hash } from 'bcrypt-ts';
-import { getMePassword, isMePasswordValid, updateMePassword } from "./me.service";
+import { getMePassword, isMePasswordValid, updateMePassword } from "./me.service.js";
 
 export async function getMe(c: Context) {
   try {

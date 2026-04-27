@@ -1,5 +1,5 @@
 import { createRoute, z } from "@hono/zod-openapi";
-import { GetWorkspaceSchema } from "../workspace.model";
+import { GetWorkspaceSchema } from "../workspace.model.js";
 
 export const GetWorkspaceRoute = createRoute({
   path: ':id',

@@ -1,6 +1,6 @@
 import { Context } from "hono";
-import { getWorkspaces as getWorkspacesService } from "../workspace.service";
-import { GetPaginatedWorkspaceParamsSchema } from "../workspace.model";
+import { getWorkspaces as getWorkspacesService } from "../workspace.service.js";
+import { GetPaginatedWorkspaceParamsSchema } from "../workspace.model.js";
 import { ZodError } from "zod";
 
 export async function getWorkspaces(c: Context) {

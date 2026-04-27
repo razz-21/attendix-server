@@ -1,5 +1,5 @@
 import { createRoute } from "@hono/zod-openapi";
-import { GetPaginatedWorkspaceParamsSchema, GetPaginatedWorkspaceSchema } from "../workspace.model";
+import { GetPaginatedWorkspaceParamsSchema, GetPaginatedWorkspaceSchema } from "../workspace.model.js";
 
 export const GetWorkspacesRoute = createRoute({
   path: '/',

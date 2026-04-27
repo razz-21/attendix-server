@@ -1,5 +1,5 @@
 import { COLLECTIONS } from "src/constants/collectionts.constant";
-import { GetPaginatedWorkspace, GetPaginatedWorkspaceParams, GetWorkspace, PatchWorkspace, PostWorkspace, PostWorkspaceSchema } from "./workspace.model";
+import { GetPaginatedWorkspace, GetPaginatedWorkspaceParams, GetWorkspace, PatchWorkspace, PostWorkspace, PostWorkspaceSchema } from "./workspace.model.js";
 import { getDb } from "src/config/db.config";
 import { Filter } from "mongodb";
 

@@ -1,6 +1,6 @@
 import { Context } from "hono";
-import { PatchWorkspace, PatchWorkspaceSchema } from "../workspace.model";
-import { updateWorkspaceById } from "../workspace.service";
+import { PatchWorkspace, PatchWorkspaceSchema } from "../workspace.model.js";
+import { updateWorkspaceById } from "../workspace.service.js";
 import { ZodError } from "zod";
 
 export async function patchWorkspace(c: Context) {
