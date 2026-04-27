@@ -35,11 +35,12 @@ export async function emailLogin(c: Context) {
     const accessTokenExpiresInMinutes = Number(process.env.ACCESS_TOKEN_EXPIRES_IN_MINUTES ?? "15");
     const refreshTokenExpiresInMinutes = Number(process.env.REFRESH_TOKEN_EXPIRES_IN_MINUTES ?? "10080");
     const isProduction = process.env.NODE_ENV === "production";
+    const cookieSameSite = isProduction ? "None" : "Lax";
 
     setCookie(c, AUTH_COOKIES.ACCESS_TOKEN, accessToken, {
       httpOnly: true,
       secure: isProduction,
-      sameSite: isProduction ? "Strict" : "None",
+      sameSite: cookieSameSite,
       maxAge: accessTokenExpiresInMinutes * 60,
       path: "/",
     });
@@ -47,7 +48,7 @@ export async function emailLogin(c: Context) {
     setCookie(c, AUTH_COOKIES.REFRESH_TOKEN, refreshToken, {
       httpOnly: true,
       secure: isProduction,
-      sameSite: isProduction ? "Strict" : "None",
+      sameSite: cookieSameSite,
       maxAge: refreshTokenExpiresInMinutes * 60,
       path: "/",
     });

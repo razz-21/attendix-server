@@ -78,11 +78,12 @@ async function fallbackWithRefreshToken(c: Context, next: Next, refreshToken: st
 
   const newAccessToken = await sign(newAccessPayload, accessTokenSecret, "HS256");
   const isProduction = process.env.NODE_ENV === "production";
+  const cookieSameSite = isProduction ? "None" : "Lax";
 
   setCookie(c, AUTH_COOKIES.ACCESS_TOKEN, newAccessToken, {
     httpOnly: true,
     secure: isProduction,
-    sameSite: isProduction ? "Strict" : "None",
+    sameSite: cookieSameSite,
     maxAge: accessTokenExpiresInMinutes * 60,
     path: "/",
   });
