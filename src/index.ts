@@ -4,7 +4,7 @@ import { cors } from 'hono/cors';
 import 'hono';
 import { OpenAPIHono } from '@hono/zod-openapi';
 import authRoutes from './api/auth/routes/auth.routes.js';
-import meRoutes from './api/me/routes/me.routes.js';
+import meRoutes from './api/me/me.routes.js';
 import workspaceRoutes from './api/workspace/workspace.routes.js';
 
 const app = new OpenAPIHono();
