@@ -1,6 +1,6 @@
-import { COLLECTIONS } from "src/constants/collectionts.constant";
+import { COLLECTIONS } from "../../constants/collectionts.constant.js";
 import { GetPaginatedWorkspace, GetPaginatedWorkspaceParams, GetWorkspace, PatchWorkspace, PostWorkspace, PostWorkspaceSchema } from "./workspace.model.js";
-import { getDb } from "src/config/db.config";
+import { getDb } from "../../config/db.config.js";
 import { Filter } from "mongodb";
 
 export async function getWorkspaceById(id: string): Promise<GetWorkspace | null> {

@@ -1,6 +1,6 @@
 import { compare } from "bcrypt-ts";
-import { COLLECTIONS } from "src/constants/collectionts.constant";
-import { getDb } from "src/config/db.config";
+import { COLLECTIONS } from "../../constants/collectionts.constant.js";
+import { getDb } from "../../config/db.config.js";
 
 export async function isMePasswordValid(password: string, hashedPassword: string): Promise<boolean> {
   try {
