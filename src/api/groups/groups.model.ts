@@ -77,7 +77,7 @@ export const GetPaginatedGroupParamsSchema = z.object({
   limit: z.number().optional(),
   q: z.string().optional(),
   workspace_id: z.string().optional(),
-  departmenr: z.string().optional(),
+  department: z.string().optional(),
 }).openapi('GetPaginatedGroupParams');
 
 export const GetPaginatedGroupsSchema = z.object({
@@ -86,3 +86,11 @@ export const GetPaginatedGroupsSchema = z.object({
   page: z.number(),
   limit: z.number(),
 }).openapi('GetPaginatedGroups');
+
+// Types
+export type GetGroup = z.infer<typeof GetGroupSchema>;
+export type PostGroup = z.infer<typeof PostGroupSchema>;
+export type PatchGroup = z.infer<typeof PatchGroupSchema>;
+export type DeleteGroup = z.infer<typeof DeleteGroupSchema>;
+export type GetPaginatedGroupParams = z.infer<typeof GetPaginatedGroupParamsSchema>;
+export type GetPaginatedGroups = z.infer<typeof GetPaginatedGroupsSchema>;
