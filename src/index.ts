@@ -6,6 +6,7 @@ import { OpenAPIHono } from '@hono/zod-openapi';
 import authRoutes from './api/auth/routes/auth.routes.js';
 import meRoutes from './api/me/me.routes.js';
 import workspaceRoutes from './api/workspace/workspace.routes.js';
+import groupRoutes from './api/groups/groups.routes.js'; 
 
 const app = new OpenAPIHono();
 
@@ -32,6 +33,7 @@ app.route('/api/v1/auth', authRoutes);
 app.route('/api/v1/me', meRoutes);
 app.route('/api/v1/users', usersRoutes);
 app.route('/api/v1/workspaces', workspaceRoutes);
+app.route('/api/v1/groups', groupRoutes); 
 
 app.doc('/docs', {
   openapi: '3.0.0',
