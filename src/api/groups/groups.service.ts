@@ -45,12 +45,19 @@ export async function getGroups(params: GetPaginatedGroupParams): Promise<GetPag
 export async function createGroup(payload: PostGroup): Promise<GetGroup> {
   try {
     const db = getDb();
-    const groupsCollection = db.collection<PostGroup>(COLLECTIONS.GROUPS);
-    const result = await groupsCollection.insertOne(payload);
+    const groupsCollection = db.collection<GetGroup>(COLLECTIONS.GROUPS);
+    const group: GetGroup = { ...payload, id: crypto.randomUUID(),
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString(),
+    };
+
+    const result = await groupsCollection.insertOne(group);
+
     if (!result.acknowledged) {
       throw new Error('Failed to create group');
     }
-    return payload as unknown as GetGroup;
+
+    return group;
   } catch (error) {
     throw new Error('Failed to create group');
   }
@@ -81,7 +88,7 @@ export async function deleteGroupById(id: string): Promise<boolean> {
     const db = getDb();
     const groupsCollection = db.collection<GetGroup>(COLLECTIONS.GROUPS);
     const result = await groupsCollection.deleteOne({ id });
-    return result.acknowledged;
+    return result.deletedCount > 0;
   } catch (error) {
     throw new Error('Failed to delete group');
   }
