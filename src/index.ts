@@ -1,5 +1,6 @@
 import { connectDB } from './config/db.config.js'
 import usersRoutes from './api/users/routes/users.routes.js'
+import attendanceRoutes from './api/attendances/attendance.routes.js'
 import { cors } from 'hono/cors';
 import 'hono';
 import { OpenAPIHono } from '@hono/zod-openapi';
@@ -34,6 +35,7 @@ app.route('/api/v1/me', meRoutes);
 app.route('/api/v1/users', usersRoutes);
 app.route('/api/v1/workspaces', workspaceRoutes);
 app.route('/api/v1/groups', groupRoutes); 
+app.route('/api/v1/attendances', attendanceRoutes);
 
 app.doc('/docs', {
   openapi: '3.0.0',
