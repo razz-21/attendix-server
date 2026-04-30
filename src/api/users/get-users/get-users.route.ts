@@ -1,13 +1,11 @@
 import { createRoute, z } from "@hono/zod-openapi";
-import { GetUserSchema } from "../users.model.js";
+import { GetPaginatedUserParamsSchema, GetPaginatedUsersSchema } from "../users.model.js";
 
-export const GetUserByIdRoute = createRoute({
-  path: ':id',
+export const GetUsersRoute = createRoute({
+  path: '',
   method: 'get',
   request: {
-    params: z.object({
-      id: z.string(),
-    }),
+    params: GetPaginatedUserParamsSchema,
     headers: z.object({
       'Content-Type': z.string().default('application/json'),
     }),
@@ -16,13 +14,13 @@ export const GetUserByIdRoute = createRoute({
     200: {
       content: {
         'application/json': {
-          schema: GetUserSchema,
+          schema: GetPaginatedUsersSchema,
         },
       },
-      description: 'Successfully retrieved user by id',
+      description: 'Successfully retrieved paginated users',
     },
     500: {
       description: 'Internal server error',
-    },
+    }
   },
 });

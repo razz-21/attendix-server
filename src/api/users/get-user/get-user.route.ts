@@ -1,9 +1,9 @@
 import { createRoute, z } from "@hono/zod-openapi";
-import { GetUserSchema, PatchUserSchema } from "../users.model.js";
+import { GetUserSchema } from "../users.model.js";
 
-export const UpdateUserRoute = createRoute({
+export const GetUserRoute = createRoute({
   path: ':id',
-  method: 'patch',
+  method: 'get',
   request: {
     params: z.object({
       id: z.string(),
@@ -11,13 +11,6 @@ export const UpdateUserRoute = createRoute({
     headers: z.object({
       'Content-Type': z.string().default('application/json'),
     }),
-    body: {
-      content: {
-        'application/json': {
-          schema: PatchUserSchema,
-        },
-      },
-    },
   },
   responses: {
     200: {
@@ -26,13 +19,10 @@ export const UpdateUserRoute = createRoute({
           schema: GetUserSchema,
         },
       },
-      description: 'Successfully updated user',
+      description: 'Successfully retrieved user by id',
     },
     500: {
       description: 'Internal server error',
-    },
-    400: {
-      description: 'Bad request',
     },
   },
 });

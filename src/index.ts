@@ -1,5 +1,5 @@
 import { connectDB } from './config/db.config.js'
-import usersRoutes from './api/users/routes/users.routes.js'
+import usersRoutes from './api/users/users.routes.js'
 import attendanceRoutes from './api/attendances/attendance.routes.js'
 import { cors } from 'hono/cors';
 import 'hono';
