@@ -42,7 +42,7 @@ export const WorkspaceSchema = z.object({
   ),
 }).openapi('Workspace');
 
-export const GetWorkspaceSchema = WorkspaceSchema.openapi('GetWorkspace');
+export const GetWorkspaceSchema = WorkspaceSchema.extend({ total_users: z.number(), total_groups: z.number() }).openapi('GetWorkspace');
 export const PostWorkspaceSchema = WorkspaceSchema.openapi('PostWorkspace');
 export const PatchWorkspaceSchema = WorkspaceSchema.omit({ id: true, created_at: true }).partial().openapi('PatchWorkspace');
 export const DeleteWorkspaceSchema = WorkspaceSchema.pick({ id: true }).openapi('DeleteWorkspace');
