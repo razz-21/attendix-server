@@ -1,5 +1,5 @@
 import { COLLECTIONS } from "../../constants/collectionts.constant.js";
-import { GetPaginatedWorkspace, GetPaginatedWorkspaceParams, GetWorkspace, PatchWorkspace, PostWorkspace, PostWorkspaceSchema } from "./workspace.model.js";
+import { GetPaginatedWorkspace, GetPaginatedWorkspaceParams, GetWorkspace, PatchWorkspace, PostWorkspace } from "./workspace.model.js";
 import { getDb } from "../../config/db.config.js";
 import { Filter } from "mongodb";
 
@@ -19,6 +19,8 @@ export async function getWorkspaces(params: GetPaginatedWorkspaceParams): Promis
     const db = getDb();
     const workspacesCollection = db.collection<GetWorkspace>(COLLECTIONS.WORKSPACES);
     const searchQuery = params.q?.trim();
+    const page = params.page || 1;
+    const limit = params.limit || 5;
     const filter: Filter<GetWorkspace> = searchQuery
       ? {
           $or: [
@@ -27,11 +29,52 @@ export async function getWorkspaces(params: GetPaginatedWorkspaceParams): Promis
         }
       : {};
 
-    console.log(filter);
-    const workspaces = await workspacesCollection.find<GetWorkspace>(filter).toArray();
+    const workspacesWithTotals = await workspacesCollection.aggregate<GetWorkspace>([
+      { $match: filter },
+      {
+        $lookup: {
+          from: COLLECTIONS.USERS,
+          localField: "id",
+          foreignField: "workspace_id",
+          as: "workspace_users",
+        },
+      },
+      {
+        $lookup: {
+          from: COLLECTIONS.GROUPS,
+          localField: "id",
+          foreignField: "workspace_id",
+          as: "workspace_groups",
+        },
+      },
+      {
+        $addFields: {
+          total_users: { $size: "$workspace_users" },
+          total_groups: { $size: "$workspace_groups" },
+        },
+      },
+      {
+        $project: {
+          workspace_users: 0,
+          workspace_groups: 0,
+        },
+      },
+      {
+        $sort: {
+          created_at: -1,
+        },
+      },
+      {
+        $skip: (page - 1) * limit,
+      },
+      {
+        $limit: limit,
+      },
+    ]).toArray();
+    
     const total = await workspacesCollection.countDocuments(filter);
     return {
-      data: workspaces,
+      data: workspacesWithTotals,
       total,
       page: params.page || 1,
       limit: params.limit || 10,
@@ -60,7 +103,7 @@ export async function createWorkspace(payload: PostWorkspace): Promise<GetWorksp
     if (!result.acknowledged) {
       throw new Error('Failed to create workspace');
     }
-    return payload;
+    return { ...payload, total_users: 0, total_groups: 0 };
   } catch (error) {
     throw new Error('Failed to create workspace');
   }
