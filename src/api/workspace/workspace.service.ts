@@ -2,6 +2,7 @@ import { COLLECTIONS } from "../../constants/collectionts.constant.js";
 import { GetPaginatedWorkspace, GetPaginatedWorkspaceParams, GetWorkspace, PatchWorkspace, PostWorkspace } from "./workspace.model.js";
 import { getDb } from "../../config/db.config.js";
 import { Filter } from "mongodb";
+import { User } from "../users/users.model.js";
 
 export async function getWorkspaceById(id: string): Promise<GetWorkspace | null> {
   try {
@@ -133,5 +134,16 @@ export async function deleteWorkspaceById(id: string): Promise<boolean> {
     return result.acknowledged;
   } catch (error) {
     throw new Error('Failed to delete workspace');
+  }
+}
+
+export async function getWorkspaceUsers(id: string): Promise<User[]> {
+  try {
+    const db = getDb();
+    const usersCollection = db.collection<User>(COLLECTIONS.USERS);
+    const users = await usersCollection.find({ workspace_id: id }, { projection: { password: 0 } }).toArray();
+    return users;
+  } catch (error) {
+    throw new Error('Failed to get workspace users');
   }
 }

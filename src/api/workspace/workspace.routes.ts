@@ -10,6 +10,8 @@ import { getWorkspaces } from "./get-workspaces/get-workspaces.controller.js";
 import { PatchWorkspaceRoute } from "./patch-workspace/patch-workspace.route.js";
 import { patchWorkspace } from "./patch-workspace/patch-workspace.controller.js";
 import { authMiddleware } from "src/middleware/auth.middleware";
+import { GetWorkspaceUsersRoute } from "./get-workspace-users/get-workspace-users.route.js";
+import { getWorkspaceUsersController } from "./get-workspace-users/get-workspace-users.controller.js";
 
 const workspaceRoutes = new OpenAPIHono();
 
@@ -20,5 +22,6 @@ workspaceRoutes.openapi(GetWorkspaceRoute, getWorkspace);
 workspaceRoutes.openapi(PostWorkspaceRoute, postWorkspace);
 workspaceRoutes.openapi(DeleteWorkspaceRoute, deleteWorkspace);
 workspaceRoutes.openapi(PatchWorkspaceRoute, patchWorkspace);
+workspaceRoutes.openapi(GetWorkspaceUsersRoute, getWorkspaceUsersController);
 
 export default workspaceRoutes;
