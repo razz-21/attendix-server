@@ -3,4 +3,5 @@ export const COLLECTIONS = {
   WORKSPACES: 'workspaces',
   GROUPS: 'groups',
   GROUP_MEMBERS: 'group_members', 
+  ATTENDANCES: 'attendances',
 };

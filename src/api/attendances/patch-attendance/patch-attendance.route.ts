@@ -1,20 +1,17 @@
 import { createRoute, z } from "@hono/zod-openapi";
-import { GetUserSchema, PatchUserSchema } from "../users.model.js";
+import { GetAttendanceSchema, PatchAttendanceSchema } from "../attendance.model.js";
 
-export const UpdateUserRoute = createRoute({
+export const PatchAttendanceRoute = createRoute({
   path: ':id',
   method: 'patch',
   request: {
     params: z.object({
       id: z.string(),
     }),
-    headers: z.object({
-      'Content-Type': z.string().default('application/json'),
-    }),
     body: {
       content: {
         'application/json': {
-          schema: PatchUserSchema,
+          schema: PatchAttendanceSchema,
         },
       },
     },
@@ -23,16 +20,16 @@ export const UpdateUserRoute = createRoute({
     200: {
       content: {
         'application/json': {
-          schema: GetUserSchema,
+          schema: GetAttendanceSchema,
         },
       },
-      description: 'Successfully updated user',
+      description: 'Successfully updated attendance',
+    },
+    404: {
+      description: 'Attendance not found',
     },
     500: {
       description: 'Internal server error',
-    },
-    400: {
-      description: 'Bad request',
     },
   },
 });

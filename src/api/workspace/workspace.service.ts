@@ -1,7 +1,8 @@
 import { COLLECTIONS } from "../../constants/collectionts.constant.js";
-import { GetPaginatedWorkspace, GetPaginatedWorkspaceParams, GetWorkspace, PatchWorkspace, PostWorkspace, PostWorkspaceSchema } from "./workspace.model.js";
+import { GetPaginatedWorkspace, GetPaginatedWorkspaceParams, GetWorkspace, PatchWorkspace, PostWorkspace } from "./workspace.model.js";
 import { getDb } from "../../config/db.config.js";
 import { Filter } from "mongodb";
+import { GetUser, User } from "../users/users.model.js";
 
 export async function getWorkspaceById(id: string): Promise<GetWorkspace | null> {
   try {
@@ -19,6 +20,8 @@ export async function getWorkspaces(params: GetPaginatedWorkspaceParams): Promis
     const db = getDb();
     const workspacesCollection = db.collection<GetWorkspace>(COLLECTIONS.WORKSPACES);
     const searchQuery = params.q?.trim();
+    const page = params.page || 1;
+    const limit = params.limit || 5;
     const filter: Filter<GetWorkspace> = searchQuery
       ? {
           $or: [
@@ -27,11 +30,52 @@ export async function getWorkspaces(params: GetPaginatedWorkspaceParams): Promis
         }
       : {};
 
-    console.log(filter);
-    const workspaces = await workspacesCollection.find<GetWorkspace>(filter).toArray();
+    const workspacesWithTotals = await workspacesCollection.aggregate<GetWorkspace>([
+      { $match: filter },
+      {
+        $lookup: {
+          from: COLLECTIONS.USERS,
+          localField: "id",
+          foreignField: "workspace_id",
+          as: "workspace_users",
+        },
+      },
+      {
+        $lookup: {
+          from: COLLECTIONS.GROUPS,
+          localField: "id",
+          foreignField: "workspace_id",
+          as: "workspace_groups",
+        },
+      },
+      {
+        $addFields: {
+          total_users: { $size: "$workspace_users" },
+          total_groups: { $size: "$workspace_groups" },
+        },
+      },
+      {
+        $project: {
+          workspace_users: 0,
+          workspace_groups: 0,
+        },
+      },
+      {
+        $sort: {
+          created_at: -1,
+        },
+      },
+      {
+        $skip: (page - 1) * limit,
+      },
+      {
+        $limit: limit,
+      },
+    ]).toArray();
+    
     const total = await workspacesCollection.countDocuments(filter);
     return {
-      data: workspaces,
+      data: workspacesWithTotals,
       total,
       page: params.page || 1,
       limit: params.limit || 10,
@@ -60,7 +104,7 @@ export async function createWorkspace(payload: PostWorkspace): Promise<GetWorksp
     if (!result.acknowledged) {
       throw new Error('Failed to create workspace');
     }
-    return payload;
+    return { ...payload, total_users: 0, total_groups: 0 };
   } catch (error) {
     throw new Error('Failed to create workspace');
   }
@@ -90,5 +134,35 @@ export async function deleteWorkspaceById(id: string): Promise<boolean> {
     return result.acknowledged;
   } catch (error) {
     throw new Error('Failed to delete workspace');
+  }
+}
+
+export async function getWorkspaceUsers(id: string): Promise<User[]> {
+  try {
+    const db = getDb();
+    const usersCollection = db.collection<User>(COLLECTIONS.USERS);
+    const users = await usersCollection.find({ workspace_id: id }, { projection: { password: 0 } }).toArray();
+    return users;
+  } catch (error) {
+    throw new Error('Failed to get workspace users');
+  }
+}
+
+export async function addWorkspaceUsers(id: string, users: GetUser[]): Promise<User[]> {
+  try {
+    // console.log(id);
+    const db = getDb();
+    const usersCollection = db.collection<User>(COLLECTIONS.USERS);
+    const userIds = users.map((user) => user.id);
+    const result = await usersCollection.updateMany({ id: { $in: userIds } }, { $set: { workspace_id: id } });
+    if (!result.acknowledged) {
+      throw new Error('Failed to add workspace users');
+    }
+
+    const updatedUsers = await usersCollection.find({ id: { $in: userIds } }, { projection: { password: 0 } }).toArray();
+    return updatedUsers;
+  } catch (error) {
+    console.error(error);
+    throw new Error('Failed to add workspace users');
   }
 }

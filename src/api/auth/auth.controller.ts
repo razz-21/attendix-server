@@ -24,16 +24,24 @@ export async function emailLogin(c: Context) {
       return c.json({ error: 'Invalid credentials' }, 401);
     }
 
-    const userPayload = {
-      user: user,
-      exp: getExpirationTimestamp(Number(process.env.ACCESS_TOKEN_EXPIRES_IN_MINUTES ?? "15")),
-      refresh_exp: getExpirationTimestamp(Number(process.env.REFRESH_TOKEN_EXPIRES_IN_MINUTES ?? "10080")),
-    };
-    const accessToken = await signAccessToken(userPayload);
-    const refreshToken = await signRefreshToken(userPayload);
-
     const accessTokenExpiresInMinutes = Number(process.env.ACCESS_TOKEN_EXPIRES_IN_MINUTES ?? "15");
     const refreshTokenExpiresInMinutes = Number(process.env.REFRESH_TOKEN_EXPIRES_IN_MINUTES ?? "10080");
+    const accessTokenExp = getExpirationTimestamp(accessTokenExpiresInMinutes);
+    const refreshTokenExp = getExpirationTimestamp(refreshTokenExpiresInMinutes);
+
+    const accessPayload = {
+      user: user,
+      exp: accessTokenExp,
+      refresh_exp: refreshTokenExp,
+    };
+    const refreshPayload = {
+      user: user,
+      exp: refreshTokenExp,
+      refresh_exp: refreshTokenExp,
+    };
+
+    const accessToken = await signAccessToken(accessPayload);
+    const refreshToken = await signRefreshToken(refreshPayload);
     const isProduction = process.env.NODE_ENV === "production";
     const cookieSameSite = isProduction ? "None" : "Lax";
 
@@ -56,7 +64,7 @@ export async function emailLogin(c: Context) {
     const loginResponse: EmailLoginResponse = {
       access_token: accessToken,
       refresh_token: refreshToken,
-      payload: userPayload,
+      payload: accessPayload,
     };
 
     return c.json(loginResponse);

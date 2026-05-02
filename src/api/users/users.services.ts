@@ -10,7 +10,7 @@ import {
 } from "./users.model.js";
 import { COLLECTIONS } from "../../constants/collectionts.constant.js";
 
-export async function getUserByIdService(id: string): Promise<GetUser | null> {
+export async function getUserById(id: string): Promise<GetUser | null> {
   try {
     const db = getDb();
     const usersCollection = db.collection<GetUser>(COLLECTIONS.USERS);
@@ -46,9 +46,11 @@ export async function getUsersService(page: number, limit: number, q?: string, s
     }
     const users = await usersCollection
       .find<GetUser>(filter, { projection: { password: 0 } })
+      .sort({ created_at: -1 })
       .skip((page - 1) * limit)
       .limit(limit)
       .toArray();
+      
     const total = await usersCollection.countDocuments(filter);
     return {
       data: users,
@@ -61,7 +63,7 @@ export async function getUsersService(page: number, limit: number, q?: string, s
   }
 }
 
-export async function createUserService(user: PostUser): Promise<GetUser> {
+export async function createUser(user: PostUser): Promise<GetUser> {
   try {
     const db = getDb();
     const usersCollection = db.collection<PostUser>(COLLECTIONS.USERS);
@@ -73,7 +75,7 @@ export async function createUserService(user: PostUser): Promise<GetUser> {
   }
 }
 
-export async function updateUserService(id: string, user: PatchUser): Promise<GetUser | null> {
+export async function updateUser(id: string, user: PatchUser): Promise<GetUser | null> {
   try {
     const db = getDb();
     const usersCollection = db.collection<PatchUser>(COLLECTIONS.USERS);
@@ -88,7 +90,7 @@ export async function updateUserService(id: string, user: PatchUser): Promise<Ge
   }
 }
 
-export async function deleteUserService(id: string): Promise<boolean> {
+export async function deleteUserById(id: string): Promise<boolean> {
   try {
     const db = getDb();
     const usersCollection = db.collection(COLLECTIONS.USERS);
@@ -99,7 +101,7 @@ export async function deleteUserService(id: string): Promise<boolean> {
   }
 }
 
-export async function isUsernameExistsService(username: string): Promise<boolean> {
+export async function isUsernameExists(username: string): Promise<boolean> {
   try {
     const db = getDb();
     const usersCollection = db.collection(COLLECTIONS.USERS);
@@ -110,7 +112,7 @@ export async function isUsernameExistsService(username: string): Promise<boolean
   }
 }
 
-export async function isEmailExistsService(email: string): Promise<boolean> {
+export async function isUserEmailExists(email: string): Promise<boolean> {
   try {
     const db = getDb();
     const usersCollection = db.collection(COLLECTIONS.USERS);
