@@ -19,45 +19,43 @@ export async function getGroups(params: GetPaginatedGroupParams): Promise<GetPag
     const db = getDb();
     const groupsCollection = db.collection<GetGroup>(COLLECTIONS.GROUPS);
     const searchQuery = params.q?.trim();
-    const filter: Filter<GetGroup> = searchQuery
-      ? {
-          $or: [
-            { name: { $regex: searchQuery, $options: 'i' } },
-            { department: { $regex: searchQuery, $options: 'i' } },
-            { section: { $regex: searchQuery, $options: 'i' } },
-          ],
-        }
-      : {};
 
-    const groups = await groupsCollection.find<GetGroup>(filter).toArray();
-    const total = await groupsCollection.countDocuments(filter);
-    return {
-      data: groups,
-      total,
-      page: params.page || 1,
-      limit: params.limit || 10,
+    const filter: Filter<GetGroup> = {
+      ...(params.workspace_id ? { workspace_id: params.workspace_id } : {}),
+      ...(searchQuery ? {
+        $or: [
+          { name: { $regex: searchQuery, $options: 'i' } },
+          { description: { $regex: searchQuery, $options: 'i' } },
+        ],
+      } : {}),
     };
+
+    const page = params.page || 1;
+    const limit = params.limit || 10;
+    const skip = (page - 1) * limit;
+
+    const groups = await groupsCollection
+      .find<GetGroup>(filter)
+      .sort({ created_at: -1 })
+      .skip(skip)
+      .limit(limit)
+      .toArray();
+
+    const total = await groupsCollection.countDocuments(filter);
+    return { data: groups, total, page, limit };
   } catch (error) {
     throw new Error('Failed to get groups');
   }
 }
-
 export async function createGroup(payload: PostGroup): Promise<GetGroup> {
   try {
     const db = getDb();
     const groupsCollection = db.collection<GetGroup>(COLLECTIONS.GROUPS);
-    const group: GetGroup = { ...payload, id: crypto.randomUUID(),
-      created_at: new Date().toISOString(),
-      updated_at: new Date().toISOString(),
-    };
-
-    const result = await groupsCollection.insertOne(group);
-
+    const result = await groupsCollection.insertOne(payload as unknown as GetGroup);
     if (!result.acknowledged) {
       throw new Error('Failed to create group');
     }
-
-    return group;
+    return payload as unknown as GetGroup;
   } catch (error) {
     throw new Error('Failed to create group');
   }
@@ -67,8 +65,7 @@ export async function updateGroupById(id: string, payload: PatchGroup): Promise<
   try {
     const db = getDb();
     const groupsCollection = db.collection<PatchGroup>(COLLECTIONS.GROUPS);
-    const result = await groupsCollection.findOneAndUpdate(
-      { id },
+    const result = await groupsCollection.findOneAndUpdate( { id },
       { $set: { ...payload, updated_at: new Date().toISOString() } },
       { returnDocument: 'after' }
     ) as GetGroup | null;
