@@ -2,7 +2,7 @@ import { COLLECTIONS } from "../../constants/collectionts.constant.js";
 import { GetPaginatedWorkspace, GetPaginatedWorkspaceParams, GetWorkspace, PatchWorkspace, PostWorkspace } from "./workspace.model.js";
 import { getDb } from "../../config/db.config.js";
 import { Filter } from "mongodb";
-import { User } from "../users/users.model.js";
+import { GetUser, User } from "../users/users.model.js";
 
 export async function getWorkspaceById(id: string): Promise<GetWorkspace | null> {
   try {
@@ -145,5 +145,24 @@ export async function getWorkspaceUsers(id: string): Promise<User[]> {
     return users;
   } catch (error) {
     throw new Error('Failed to get workspace users');
+  }
+}
+
+export async function addWorkspaceUsers(id: string, users: GetUser[]): Promise<User[]> {
+  try {
+    // console.log(id);
+    const db = getDb();
+    const usersCollection = db.collection<User>(COLLECTIONS.USERS);
+    const userIds = users.map((user) => user.id);
+    const result = await usersCollection.updateMany({ id: { $in: userIds } }, { $set: { workspace_id: id } });
+    if (!result.acknowledged) {
+      throw new Error('Failed to add workspace users');
+    }
+
+    const updatedUsers = await usersCollection.find({ id: { $in: userIds } }, { projection: { password: 0 } }).toArray();
+    return updatedUsers;
+  } catch (error) {
+    console.error(error);
+    throw new Error('Failed to add workspace users');
   }
 }
