@@ -5,7 +5,7 @@ export const AttendanceScheduleDaysSchema = z.array(z.enum(['Mon', 'Tue', 'Wed',
   example: ['Mon', 'Tue', 'Wed'],
 });
 
-export const AttendanceStatusSchema = z.enum(['Active', 'Archived']).openapi({
+export const AttendanceStatusSchema = z.enum(['active', 'archived']).openapi({
   description: 'The status of the attendance record',
   example: 'Active',
 });
@@ -82,6 +82,7 @@ export const PatchAttendanceSchema = AttendanceSchema
 export const DeleteAttendanceSchema = AttendanceSchema.pick({ id: true }).openapi('DeleteAttendance');
 export const GetAttendancesQuerySchema = z.object({
   q: z.string().optional(),
+  status: AttendanceStatusSchema.optional(),
 }).openapi('GetAttendancesQuery');
 
 // Types

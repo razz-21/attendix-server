@@ -19,14 +19,20 @@ export async function getAttendances(params: GetAttendancesQuery): Promise<GetAt
     const db = getDb();
     const collection = db.collection<GetAttendance>(COLLECTIONS.ATTENDANCES);
     const searchQuery = params.q?.trim();
-    const filter: Filter<GetAttendance> = searchQuery
-      ? {
-          $or: [
-            { name: { $regex: searchQuery, $options: 'i' } },
-            { code: { $regex: searchQuery, $options: 'i' } },
-          ],
-        }
-      : {};
+    const statusQuery = params.status;
+
+    const filter: Filter<GetAttendance> = {};
+
+    if (searchQuery) {
+      filter.$or = [
+        { name: { $regex: searchQuery, $options: 'i' } },
+        { code: { $regex: searchQuery, $options: 'i' } },
+      ];
+    }
+
+    if (statusQuery) {
+      filter.status = statusQuery;
+    }
 
     const attendances = await collection.find<GetAttendance>(filter).sort({ created_at: -1 }).toArray();
     return attendances;
