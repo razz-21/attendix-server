@@ -39,7 +39,7 @@ export const GroupSchema = z.object({
 }).openapi('Group');
 
 export const GetGroupSchema = GroupSchema.openapi('GetGroup');
-export const PostGroupSchema = GroupSchema.omit({ created_at: true, updated_at: true }).openapi('PostGroup');
+export const PostGroupSchema = GroupSchema.openapi('PostGroup');
 export const PatchGroupSchema = GroupSchema.partial().openapi('PatchGroup');
 export const DeleteGroupSchema = GroupSchema.pick({ id: true }).openapi('DeleteGroup');
 
