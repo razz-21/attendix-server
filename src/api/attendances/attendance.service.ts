@@ -28,7 +28,7 @@ export async function getAttendances(params: GetAttendancesQuery): Promise<GetAt
         }
       : {};
 
-    const attendances = await collection.find<GetAttendance>(filter).toArray();
+    const attendances = await collection.find<GetAttendance>(filter).sort({ created_at: -1 }).toArray();
     return attendances;
   } catch (error) {
     throw new Error('Failed to get attendances');
