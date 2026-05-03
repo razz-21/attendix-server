@@ -1,6 +1,14 @@
 import { z } from "@hono/zod-openapi";
 
-const SCHEDULE_DAYS = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'] as const;
+export const AttendanceScheduleDaysSchema = z.array(z.enum(['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'])).openapi({
+  description: 'Days of the week when attendance is tracked',
+  example: ['Mon', 'Tue', 'Wed'],
+});
+
+export const AttendanceStatusSchema = z.enum(['Active', 'Archived']).openapi({
+  description: 'The status of the attendance record',
+  example: 'Active',
+});
 
 export const AttendanceSchema = z.object({
   id: z.uuidv4().default(crypto.randomUUID()).openapi({
@@ -31,18 +39,11 @@ export const AttendanceSchema = z.object({
       example: 'Attendance tracking for morning CS101 class',
     }
   ),
-  schedule_days: z.array(z.enum(SCHEDULE_DAYS))
+  schedule_days: AttendanceScheduleDaysSchema
     .min(1, 'At least one schedule day is required')
     .openapi({
       description: 'Days of the week when attendance is tracked',
       example: ['Mon', 'Tue', 'Wed'],
-    }
-  ),
-  start_time: z.string('Start time is required')
-    .regex(/^\d{2}:\d{2}:\d{2}$/, 'Start time must be in HH:MM:SS format')
-    .openapi({
-      description: 'The scheduled start time in HH:MM:SS format',
-      example: '08:00:00',
     }
   ),
   late_threshold: z.number('Late threshold is required')
@@ -53,6 +54,7 @@ export const AttendanceSchema = z.object({
       example: 15,
     }
   ),
+  status: AttendanceStatusSchema,
   created_by: z.uuidv4().openapi({
     description: 'UUID of the user who created this attendance record',
     example: '123e4567-e89b-12d3-a456-426614174000',
