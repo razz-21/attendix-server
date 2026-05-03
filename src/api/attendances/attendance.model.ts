@@ -1,6 +1,7 @@
 import { z } from "@hono/zod-openapi";
 
 const SCHEDULE_DAYS = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'] as const;
+const ATTENDANCE_STATUSES = ['Active', 'Archived'] as const;
 
 export const AttendanceSchema = z.object({
   id: z.uuidv4().default(crypto.randomUUID()).openapi({
@@ -25,10 +26,16 @@ export const AttendanceSchema = z.object({
   ),
   description: z.string()
     .trim()
-    .optional()
+    .min(1, 'Description is required')
     .openapi({
       description: 'A brief description of the attendance configuration',
       example: 'Attendance tracking for morning CS101 class',
+    }
+  ),
+  status: z.enum(ATTENDANCE_STATUSES)
+    .openapi({
+      description: 'The current attendance status',
+      example: 'Active',
     }
   ),
   schedule_days: z.array(z.enum(SCHEDULE_DAYS))
@@ -38,18 +45,11 @@ export const AttendanceSchema = z.object({
       example: ['Mon', 'Tue', 'Wed'],
     }
   ),
-  start_time: z.string('Start time is required')
-    .regex(/^\d{2}:\d{2}:\d{2}$/, 'Start time must be in HH:MM:SS format')
-    .openapi({
-      description: 'The scheduled start time in HH:MM:SS format',
-      example: '08:00:00',
-    }
-  ),
   late_threshold: z.number('Late threshold is required')
     .int()
     .min(0, 'Late threshold must be a non-negative integer')
     .openapi({
-      description: 'Number of minutes after start_time before a student is considered late',
+      description: 'Number of minutes allowed before a student is considered late',
       example: 15,
     }
   ),
