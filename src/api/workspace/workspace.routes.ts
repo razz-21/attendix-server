@@ -9,7 +9,7 @@ import { GetWorkspacesRoute } from "./get-workspaces/get-workspaces.route.js";
 import { getWorkspaces } from "./get-workspaces/get-workspaces.controller.js";
 import { PatchWorkspaceRoute } from "./patch-workspace/patch-workspace.route.js";
 import { patchWorkspace } from "./patch-workspace/patch-workspace.controller.js";
-import { authMiddleware } from "src/middleware/auth.middleware";
+import { authMiddleware } from "src/middleware/auth.middleware.js";
 import { GetWorkspaceUsersRoute } from "./get-workspace-users/get-workspace-users.route.js";
 import { getWorkspaceUsersController } from "./get-workspace-users/get-workspace-users.controller.js";
 import { PostWorkspaceUsersRoute } from "./post-workspace-users/post-workspace-users.route.js";

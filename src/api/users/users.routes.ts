@@ -1,20 +1,20 @@
 
 import { OpenAPIHono } from "@hono/zod-openapi";
-import { authMiddleware } from "src/middleware/auth.middleware";
-import { GetUsersRoute } from "./get-users/get-users.route";
-import { getUsers } from "./get-users/get-users.controller";
-import { GetUserRoute } from "./get-user/get-user.route";
-import { getUser } from "./get-user/get-user.controller";
-import { CreateUserRoute } from "./post-user/post-user.route";
-import { deleteUser } from "./delete-user/delete-user.controller";
-import { postUser } from "./post-user/post-user.controller";
-import { PatchUserRoute } from "./patch-user/patch-user.route";
-import { patchUser } from "./patch-user/patch-user.controller";
-import { DeleteUserRoute } from "./delete-user/delete-user.route";
-import { UsernameExistsRoute } from "./username-exists/username-exists.route";
-import { usernameExist } from "./username-exists/username-exists.controller";
-import { EmailExistsRoute } from "./email-exists/email-exists.route";
-import { emailExists } from "./email-exists/email-exists.controller";
+import { authMiddleware } from "src/middleware/auth.middleware.js";
+import { GetUsersRoute } from "./get-users/get-users.route.js";
+import { getUsers } from "./get-users/get-users.controller.js";
+import { GetUserRoute } from "./get-user/get-user.route.js";
+import { getUser } from "./get-user/get-user.controller.js";
+import { CreateUserRoute } from "./post-user/post-user.route.js";
+import { deleteUser } from "./delete-user/delete-user.controller.js";
+import { postUser } from "./post-user/post-user.controller.js";
+import { PatchUserRoute } from "./patch-user/patch-user.route.js";
+import { patchUser } from "./patch-user/patch-user.controller.js";
+import { DeleteUserRoute } from "./delete-user/delete-user.route.js";
+import { UsernameExistsRoute } from "./username-exists/username-exists.route.js";
+import { usernameExist } from "./username-exists/username-exists.controller.js";
+import { EmailExistsRoute } from "./email-exists/email-exists.route.js";
+import { emailExists } from "./email-exists/email-exists.controller.js";
 
 const usersRoutes = new OpenAPIHono();
 
