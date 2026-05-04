@@ -1,7 +1,7 @@
 import { createRoute, z } from "@hono/zod-openapi";
 
 export const EmailLogoutRoute = createRoute({
-  path: '/email-logout',
+  path: '/logout',
   method: 'delete',
   responses: {
     200: {
