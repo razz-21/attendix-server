@@ -1,4 +1,4 @@
-import { GetUser } from "src/api/users/users.model";
+import { GetUser } from "../../users/users.model.js";
 import { Context } from "hono";
 import { addWorkspaceUsers } from "../workspace.service";
 

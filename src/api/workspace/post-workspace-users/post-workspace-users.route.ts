@@ -1,5 +1,5 @@
 import { createRoute, z } from "@hono/zod-openapi";
-import { GetUserSchema } from "src/api/users/users.model";
+import { GetUserSchema } from "../../users/users.model.js";
 
 export const PostWorkspaceUsersRoute = createRoute({
   path: ':id/users',

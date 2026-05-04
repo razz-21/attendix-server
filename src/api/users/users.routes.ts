@@ -1,6 +1,6 @@
 
 import { OpenAPIHono } from "@hono/zod-openapi";
-import { authMiddleware } from "src/middleware/auth.middleware.js";
+import { authMiddleware } from "../../middleware/auth.middleware.js";
 import { GetUsersRoute } from "./get-users/get-users.route.js";
 import { getUsers } from "./get-users/get-users.controller.js";
 import { GetUserRoute } from "./get-user/get-user.route.js";
