@@ -21,6 +21,7 @@
   "scripts": {
     "prepare": "husky",
     "dev": "tsx watch src/server.ts",
-    "start": "node dist/server.js"
+    "start": "node dist/server.js",
+    "typecheck": "tsc --noEmit"
   }
 }

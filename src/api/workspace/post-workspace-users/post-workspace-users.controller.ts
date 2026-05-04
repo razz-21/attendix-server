@@ -1,6 +1,6 @@
 import { GetUser } from "../../users/users.model.js";
 import { Context } from "hono";
-import { addWorkspaceUsers } from "../workspace.service";
+import { addWorkspaceUsers } from "../workspace.service.js";
 
 export async function postWorkspaceUsersController(c: Context) {
   try {

@@ -1,6 +1,6 @@
 import { Context } from "hono";
-import { createGroupMember } from "../groups-member.service";
-import { PostGroupMemberSchema } from "../groups-member.model";
+import { createGroupMember } from "../groups-member.service.js";
+import { PostGroupMemberSchema } from "../groups-member.model.js";
 import { ZodError } from "zod";
 
 export async function postGroupMemberController(c: Context) {

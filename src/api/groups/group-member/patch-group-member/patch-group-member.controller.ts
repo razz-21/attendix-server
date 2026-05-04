@@ -1,6 +1,6 @@
 import { Context } from "hono";
-import { updateGroupMemberById } from "../groups-member.service";
-import { PatchGroupMemberSchema } from "../groups-member.model";
+import { updateGroupMemberById } from "../groups-member.service.js";
+import { PatchGroupMemberSchema } from "../groups-member.model.js";
 import { ZodError } from "zod";
 
 export async function patchGroupMemberController(c: Context) {

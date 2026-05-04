@@ -1,6 +1,6 @@
-import { COLLECTIONS } from "../../../constants/collectionts.constant"
-import { GetGroupMember, GetPaginatedGroupMembers, GetPaginatedGroupMemberParams, PatchGroupMember, PostGroupMember } from "./groups-member.model";
-import { getDb } from "../../../config/db.config"
+import { COLLECTIONS } from "../../../constants/collectionts.constant.js";
+import { GetGroupMember, GetPaginatedGroupMembers, GetPaginatedGroupMemberParams, PatchGroupMember, PostGroupMember } from "./groups-member.model.js";
+import { getDb } from "../../../config/db.config.js";
 import { Filter } from "mongodb";
 
 export async function getGroupMembers(group_id: string, params: GetPaginatedGroupMemberParams): Promise<GetPaginatedGroupMembers> {

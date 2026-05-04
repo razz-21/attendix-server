@@ -1,5 +1,5 @@
 import { createRoute, z } from "@hono/zod-openapi";
-import { GetGroupMemberSchema, PostGroupMemberSchema } from "../groups-member.model";
+import { GetGroupMemberSchema, PostGroupMemberSchema } from "../groups-member.model.js";
 
 export const PostGroupMemberRoute = createRoute({
   path: '/:group_id/members',

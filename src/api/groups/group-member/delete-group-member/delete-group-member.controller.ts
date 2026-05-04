@@ -1,5 +1,5 @@
 import { Context } from "hono";
-import { deleteGroupMemberById } from "../groups-member.service";
+import { deleteGroupMemberById } from "../groups-member.service.js";
 import { ZodError } from "zod";
 
 export async function deleteGroupMemberController(c: Context) {

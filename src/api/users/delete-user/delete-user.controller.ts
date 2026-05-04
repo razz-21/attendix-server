@@ -1,5 +1,5 @@
 import { Context } from "hono";
-import { deleteUserById } from "../users.services";
+import { deleteUserById } from "../users.services.js";
 
 export async function deleteUser(c: Context) {
   try {

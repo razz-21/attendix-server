@@ -1,5 +1,5 @@
 import { createRoute } from "@hono/zod-openapi";
-import { GetPaginatedGroupMemberParamsSchema, GetPaginatedGroupMembersSchema } from "../groups-member.model";
+import { GetPaginatedGroupMemberParamsSchema, GetPaginatedGroupMembersSchema } from "../groups-member.model.js";
 import { z } from "@hono/zod-openapi";
 
 export const GetGroupMembersRoute = createRoute({

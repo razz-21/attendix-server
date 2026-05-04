@@ -1,6 +1,6 @@
 import { Context } from "hono";
-import { getGroupMembers } from "../groups-member.service";
-import { GetPaginatedGroupMemberParamsSchema } from "../groups-member.model";
+import { getGroupMembers } from "../groups-member.service.js";
+import { GetPaginatedGroupMemberParamsSchema } from "../groups-member.model.js";
 import { ZodError } from "zod";
 
 export async function getGroupMembersController(c: Context) {

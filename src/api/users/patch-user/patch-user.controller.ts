@@ -1,6 +1,6 @@
 import { Context } from "hono";
-import { PatchUser, PatchUserSchema } from "../users.model";
-import { isUserEmailExists, isUsernameExists, updateUser } from "../users.services";
+import { PatchUser, PatchUserSchema } from "../users.model.js";
+import { isUserEmailExists, isUsernameExists, updateUser } from "../users.services.js";
 import { ZodError } from "zod";
 
 

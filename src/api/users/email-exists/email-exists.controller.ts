@@ -1,5 +1,5 @@
 import { Context } from "hono";
-import { isUserEmailExists } from "../users.services";
+import { isUserEmailExists } from "../users.services.js";
 
 
 export async function emailExists(c: Context) {
