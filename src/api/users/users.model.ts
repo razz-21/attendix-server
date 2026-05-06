@@ -73,8 +73,6 @@ export const UserSchema = z.object({
       example: 'active',
     }),
   workspace_id: z.string('Workspace ID is required')
-    .trim()
-    .min(1, 'Workspace ID is required')
     .optional()
     .nullable()
     .openapi({
