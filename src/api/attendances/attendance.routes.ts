@@ -18,4 +18,5 @@ attendanceRoutes.openapi(PostAttendanceRoute, postAttendance);
 attendanceRoutes.openapi(PatchAttendanceRoute, patchAttendance);
 attendanceRoutes.openapi(DeleteAttendanceRoute, deleteAttendance);
 
+
 export default attendanceRoutes;
