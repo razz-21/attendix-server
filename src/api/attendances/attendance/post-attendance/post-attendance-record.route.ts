@@ -1,5 +1,5 @@
 import { createRoute, z } from "@hono/zod-openapi";
-import { GetAttendanceRecordSchema, PostAttendanceRecordSchema } from "../attendance-record.model.js";
+import { GetAttendanceRecordSchema, PostAttendanceRecordSchema } from "../attendance.model.js";
 
 export const PostAttendanceRecordRoute = createRoute({
   path: '/:attendance_id/records',

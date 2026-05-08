@@ -1,6 +1,6 @@
 import { COLLECTIONS } from "../../../constants/collectionts.constant.js";
 import { getDb } from "../../../config/db.config.js";
-import { GetAttendanceRecord, GetAttendanceRecordsQuery, PatchAttendanceRecord, PostAttendanceRecord } from "./attendance-record.model.js";
+import { GetAttendanceRecord, GetAttendanceRecordsQuery, PatchAttendanceRecord, PostAttendanceRecord } from "./attendance.model.js";
 import { Filter } from "mongodb";
 
 export async function getAttendanceRecords(attendance_id: string, params: GetAttendanceRecordsQuery): Promise<GetAttendanceRecord[]> {
