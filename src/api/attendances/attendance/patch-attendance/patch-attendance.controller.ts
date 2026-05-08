@@ -1,6 +1,6 @@
 import { Context } from "hono";
-import { updateAttendanceRecordById } from "../attendance-record.service.js";
-import { PatchAttendanceRecordSchema } from "../attendance-record.model.js";
+import { updateAttendanceRecordById } from "../attendance.service.js";
+import { PatchAttendanceRecordSchema } from "../attendance.model.js";
 import { ZodError } from "zod";
 
 export async function patchAttendanceRecordController(c: Context) {
@@ -18,8 +18,8 @@ export async function patchAttendanceRecordController(c: Context) {
     }
 
     const payload = PatchAttendanceRecordSchema.parse(body);
-    const record = await updateAttendanceRecordById(attendance_id, id, payload);
-    return c.json(record, 200);
+    const attendance = await updateAttendanceRecordById(attendance_id, id, payload);
+    return c.json(attendance, 200);
   } catch (error) {
     if (error instanceof ZodError) {
       return c.json({ error: 'Validation failed', details: error.issues }, 400);

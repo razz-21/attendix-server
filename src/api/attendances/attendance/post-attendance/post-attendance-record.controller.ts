@@ -1,6 +1,6 @@
 import { Context } from "hono";
-import { createAttendanceRecord } from "../attendance-record.service.js";
-import { PostAttendanceRecordSchema } from "../attendance-record.model.js";
+import { createAttendanceRecord } from "../attendance.service.js";
+import { PostAttendanceRecordSchema } from "../attendance.model.js";
 import { ZodError } from "zod";
 
 export async function postAttendanceRecordController(c: Context) {

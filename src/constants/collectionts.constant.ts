@@ -4,5 +4,5 @@ export const COLLECTIONS = {
   GROUPS: 'groups',
   GROUP_MEMBERS: 'group_members', 
   ATTENDANCES: 'attendances',
-  ATTENDANCE_RECORDS: 'attendance_records', 
+  ATTENDANCE: 'attendance', 
 };

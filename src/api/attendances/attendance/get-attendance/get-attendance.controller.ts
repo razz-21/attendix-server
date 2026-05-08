@@ -1,15 +1,15 @@
 import { Context } from "hono";
-import { getAttendanceRecordById } from "../attendance-record.service.js";
+import { getAttendanceRecordById } from "../attendance.service.js";
 import { ZodError } from "zod";
 
 export async function getAttendanceRecordController(c: Context) {
   try {
     const { attendance_id, id } = c.req.param();
-    const record = await getAttendanceRecordById(attendance_id, id);
-    if (!record) {
+    const attendance = await getAttendanceRecordById(attendance_id, id);
+    if (!attendance) {
       return c.json({ error: 'Attendance record not found' }, 404);
     }
-    return c.json(record, 200);
+    return c.json(attendance, 200);
   } catch (error) {
     if (error instanceof ZodError) {
       return c.json({ error: 'Validation failed', details: error.issues }, 400);

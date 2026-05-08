@@ -9,7 +9,7 @@ import { PatchAttendanceRoute } from "./patch-attendance/patch-attendance.route.
 import { patchAttendance } from "./patch-attendance/patch-attendance.controller.js";
 import { DeleteAttendanceRoute } from "./delete-attendance/delete-attendance.route.js";
 import { deleteAttendance } from "./delete-attendance/delete-attendance.controller.js";
-import attendanceRecordRoutes from "./attendance-records/attendance-record.routes.js";
+import attendanceRecordRoutes from "./attendance/attendance.routes.js";
 
 const attendanceRoutes = new OpenAPIHono();
 

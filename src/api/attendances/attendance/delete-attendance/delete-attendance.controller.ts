@@ -1,5 +1,5 @@
 import { Context } from "hono";
-import { deleteAttendanceRecordById } from "../attendance-record.service.js";
+import { deleteAttendanceRecordById } from "../attendance.service.js";
 import { ZodError } from "zod";
 
 export async function deleteAttendanceRecordController(c: Context) {

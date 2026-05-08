@@ -1,14 +1,14 @@
 import { Context } from "hono";
-import { getAttendanceRecords } from "../attendance-record.service.js";
-import { GetAttendanceRecordsQuerySchema } from "../attendance-record.model.js";
+import { getAttendanceRecords } from "../attendance.service.js";
+import { GetAttendanceRecordsQuerySchema } from "../attendance.model.js";
 import { ZodError } from "zod";
 
 export async function getAttendanceRecordsController(c: Context) {
   try {
     const { attendance_id } = c.req.param();
     const params = GetAttendanceRecordsQuerySchema.parse(c.req.query());
-    const records = await getAttendanceRecords(attendance_id, params);
-    return c.json(records, 200);
+    const attendance = await getAttendanceRecords(attendance_id, params);
+    return c.json(attendance, 200);
   } catch (error) {
     if (error instanceof ZodError) {
       return c.json({ error: 'Validation failed', details: error.issues }, 400);
