@@ -150,7 +150,6 @@ export async function getWorkspaceUsers(id: string): Promise<User[]> {
 
 export async function addWorkspaceUsers(id: string, users: GetUser[]): Promise<User[]> {
   try {
-    // console.log(id);
     const db = getDb();
     const usersCollection = db.collection<User>(COLLECTIONS.USERS);
     const userIds = users.map((user) => user.id);

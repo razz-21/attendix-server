@@ -6,41 +6,35 @@ export const UserRoleSchema = z.enum(['admin', 'user']);
 export const UserSchema = z.object({
   id: z.uuidv4().default(crypto.randomUUID()).openapi({
     description: 'The unique identifier for the user',
-    example: '123e4567-e89b-12d3-a456-426614174000',
   }),
   rfid: z.string('RFID is required')
     .trim()
     .min(1, 'RFID is required')
     .openapi({
       description: 'The RFID of the user',
-      example: '1234567890',
     }),
   firstname: z.string('First name is required')
     .trim()
     .min(1, 'First name is required')
     .openapi({
       description: 'The first name of the user',
-      example: 'John',
     }),
   lastname: z.string('Last name is required')
     .min(1, 'Last name is required')
     .openapi({
       description: 'The last name of the user',
-      example: 'Doe',
     }),
   email: z
     .string('Email is required')
     .pipe(z.email('Invalid email'))
     .openapi({
       description: 'The email of the user',
-      example: 'john.doe@example.com',
     }),
   department: z.string('Department is required')
     .trim()
     .min(1, 'Department is required')
     .openapi({
       description: 'The department of the user',
-      example: 'College of Information Technology',
     }),
   role: z.string('Role is required')
     .trim()
@@ -48,21 +42,18 @@ export const UserSchema = z.object({
     .pipe(UserRoleSchema)
     .openapi({
       description: 'The role of the user',
-      example: 'admin',
     }),
   username: z.string('Username is required')
     .trim()
     .min(1, 'Username is required')
     .openapi({
       description: 'The username of the user',
-      example: 'john.doe',
     }),
   password: z.string('Password is required')
     .trim()
     .min(1, 'Password is required')
     .openapi({
       description: 'The password of the user',
-      example: 'password',
     }),
   status: z.string('Status is required')
     .trim()
@@ -70,24 +61,20 @@ export const UserSchema = z.object({
     .pipe(UserStatusSchema)
     .openapi({
       description: 'The status of the user',
-      example: 'active',
     }),
   workspace_id: z.string('Workspace ID is required')
     .optional()
     .nullable()
     .openapi({
       description: 'The workspace ID of the user',
-      example: '1234567890',
     }),
   created_at: z.iso.datetime().default(new Date().toISOString())
     .openapi({
       description: 'The date and time the user was created',
-      example: '2021-01-01T00:00:00.000Z',
     }),
   updated_at: z.iso.datetime().default(new Date().toISOString())
     .openapi({
       description: 'The date and time the user was last updated',
-      example: '2021-01-01T00:00:00.000Z',
     }),
 }).openapi('User');
 
