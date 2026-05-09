@@ -1,3 +1,0 @@
-### Delete Workspace
-
-DELETE http://localhost:3000/api/v1/workspaces/16ebf708-11e7-4e77-a4b1-12f9b6810a38
