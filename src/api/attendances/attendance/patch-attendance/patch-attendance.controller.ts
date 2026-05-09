@@ -1,11 +1,14 @@
 import { Context } from "hono";
 import { updateAttendanceRecordById } from "../attendance.service.js";
-import { PatchAttendanceRecordSchema } from "../attendance.model.js";
+import { PatchAttendanceSchema } from "../attendance.model.js";
 import { ZodError } from "zod";
 
 export async function patchAttendanceRecordController(c: Context) {
   try {
     const { attendance_id, id } = c.req.param();
+    if (!attendance_id || !id) {
+      return c.json({ error: "attendance_id and id are required" }, 400);
+    }
     const body = await c.req.json();
 
     // Validate end_time > start_time if both provided
@@ -17,7 +20,7 @@ export async function patchAttendanceRecordController(c: Context) {
       }
     }
 
-    const payload = PatchAttendanceRecordSchema.parse(body);
+    const payload = PatchAttendanceSchema.parse(body);
     const attendance = await updateAttendanceRecordById(attendance_id, id, payload);
     return c.json(attendance, 200);
   } catch (error) {

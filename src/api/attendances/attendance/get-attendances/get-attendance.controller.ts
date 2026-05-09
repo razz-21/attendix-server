@@ -1,12 +1,15 @@
 import { Context } from "hono";
 import { getAttendanceRecords } from "../attendance.service.js";
-import { GetAttendanceRecordsQuerySchema } from "../attendance.model.js";
+import { GetAttendancesQuerySchema } from "../attendance.model.js";
 import { ZodError } from "zod";
 
 export async function getAttendanceRecordsController(c: Context) {
   try {
     const { attendance_id } = c.req.param();
-    const params = GetAttendanceRecordsQuerySchema.parse(c.req.query());
+    if (!attendance_id) {
+      return c.json({ error: "attendance_id is required" }, 400);
+    }
+    const params = GetAttendancesQuerySchema.parse(c.req.query());
     const attendance = await getAttendanceRecords(attendance_id, params);
     return c.json(attendance, 200);
   } catch (error) {

@@ -1,18 +1,18 @@
 import { createRoute, z } from "@hono/zod-openapi";
-import { GetAttendanceRecordSchema, GetAttendanceRecordsQuerySchema } from "../attendance.model.js";
+import { GetAttendanceSchema, GetAttendancesQuerySchema } from "../attendance.model.js";
 
 export const GetAttendanceRecordsRoute = createRoute({
-  path: '/:attendance_id/records',
+  path: '/:attendance_id/attendance',
   method: 'get',
   request: {
     params: z.object({ attendance_id: z.string() }),
-    query: GetAttendanceRecordsQuerySchema,
+    query: GetAttendancesQuerySchema,
   },
   responses: {
     200: {
       content: {
         'application/json': {
-          schema: z.array(GetAttendanceRecordSchema),
+          schema: z.array(GetAttendanceSchema),
         },
       },
       description: 'Successfully retrieved attendance records',

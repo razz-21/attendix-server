@@ -5,6 +5,9 @@ import { ZodError } from "zod";
 export async function getAttendanceRecordController(c: Context) {
   try {
     const { attendance_id, id } = c.req.param();
+    if (!attendance_id || !id) {
+      return c.json({ error: "attendance_id and id are required" }, 400);
+    }
     const attendance = await getAttendanceRecordById(attendance_id, id);
     if (!attendance) {
       return c.json({ error: 'Attendance record not found' }, 404);

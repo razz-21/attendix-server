@@ -1,6 +1,6 @@
 import { z } from "@hono/zod-openapi";
 
-export const AttendanceRecordSchema = z.object({
+export const AttendanceSchema = z.object({
   id: z.string().uuid().default(() => crypto.randomUUID()).openapi({
     description: 'The unique identifier for the attendance record',
     example: '123e4567-e89b-12d3-a456-426614174000',
@@ -35,20 +35,20 @@ export const AttendanceRecordSchema = z.object({
   }),
 }).openapi('AttendanceRecord');
 
-export const GetAttendanceRecordSchema = AttendanceRecordSchema.openapi('GetAttendanceRecord');
-export const PostAttendanceRecordSchema = AttendanceRecordSchema.openapi('PostAttendanceRecord');
-export const PatchAttendanceRecordSchema = AttendanceRecordSchema
+export const GetAttendanceSchema = AttendanceSchema.openapi('GetAttendance');
+export const PostAttendanceSchema = AttendanceSchema.openapi('PostAttendance');
+export const PatchAttendanceSchema = AttendanceSchema
   .omit({ id: true, created_at: true })
   .partial()
-  .openapi('PatchAttendanceRecord');
+  .openapi('PatchAttendance');
 
-export const GetAttendanceRecordsQuerySchema = z.object({
+export const GetAttendancesQuerySchema = z.object({
   q: z.string().optional(),
-}).openapi('GetAttendanceRecordsQuery');
+}).openapi('GetAttendancesQuery');
 
 // Types
-export type AttendanceRecord = z.infer<typeof AttendanceRecordSchema>;
-export type GetAttendanceRecord = z.infer<typeof GetAttendanceRecordSchema>;
-export type PostAttendanceRecord = z.infer<typeof PostAttendanceRecordSchema>;
-export type PatchAttendanceRecord = z.infer<typeof PatchAttendanceRecordSchema>;
-export type GetAttendanceRecordsQuery = z.infer<typeof GetAttendanceRecordsQuerySchema>;
+export type Attendance = z.infer<typeof AttendanceSchema>;
+export type GetAttendance = z.infer<typeof GetAttendanceSchema>;
+export type PostAttendance = z.infer<typeof PostAttendanceSchema>;
+export type PatchAttendance = z.infer<typeof PatchAttendanceSchema>;
+export type GetAttendancesQuery = z.infer<typeof GetAttendancesQuerySchema>;
