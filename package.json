@@ -10,10 +10,12 @@
     "hono": "^4.12.12",
     "jsonwebtoken": "^9.0.3",
     "mongodb": "^7.1.1",
+    "nodemailer": "^8.0.7",
     "zod": "^4.3.6"
   },
   "devDependencies": {
     "@types/node": "^20.11.17",
+    "@types/nodemailer": "^8.0.0",
     "husky": "^9.1.7",
     "tsx": "^4.7.1",
     "typescript": "^5.8.3"
