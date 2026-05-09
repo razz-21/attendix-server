@@ -1,15 +1,15 @@
 import { COLLECTIONS } from "../../../constants/collectionts.constant.js";
 import { getDb } from "../../../config/db.config.js";
-import { GetAttendanceRecord, GetAttendanceRecordsQuery, PatchAttendanceRecord, PostAttendanceRecord } from "./attendance.model.js";
+import { GetAttendance, GetAttendancesQuery, PatchAttendance, PostAttendance } from "./attendance.model.js";
 import { Filter } from "mongodb";
 
-export async function getAttendanceRecords(attendance_id: string, params: GetAttendanceRecordsQuery): Promise<GetAttendanceRecord[]> {
+export async function getAttendanceRecords(attendance_id: string, params: GetAttendancesQuery): Promise<GetAttendance[]> {
   try {
     const db = getDb();
-    const collection = db.collection<GetAttendanceRecord>(COLLECTIONS.ATTENDANCE);
+    const collection = db.collection<GetAttendance>(COLLECTIONS.ATTENDANCE);
     const searchQuery = params.q?.trim();
 
-    const filter: Filter<GetAttendanceRecord> = { attendance_id };
+    const filter: Filter<GetAttendance> = { attendance_id };
 
     if (searchQuery) {
       filter.$or = [
@@ -17,46 +17,46 @@ export async function getAttendanceRecords(attendance_id: string, params: GetAtt
       ];
     }
 
-    const records = await collection.find<GetAttendanceRecord>(filter).sort({ created_at: -1 }).toArray();
+    const records = await collection.find<GetAttendance>(filter).sort({ created_at: -1 }).toArray();
     return records;
   } catch (error) {
     throw new Error('Failed to get attendance records');
   }
 }
 
-export async function getAttendanceRecordById(attendance_id: string, id: string): Promise<GetAttendanceRecord | null> {
+export async function getAttendanceRecordById(attendance_id: string, id: string): Promise<GetAttendance | null> {
   try {
     const db = getDb();
-    const collection = db.collection<GetAttendanceRecord>(COLLECTIONS.ATTENDANCE);
-    return await collection.findOne<GetAttendanceRecord>({ id, attendance_id });
+    const collection = db.collection<GetAttendance>(COLLECTIONS.ATTENDANCE);
+    return await collection.findOne<GetAttendance>({ id, attendance_id });
   } catch (error) {
     throw new Error('Failed to get attendance record');
   }
 }
 
-export async function createAttendanceRecord(payload: PostAttendanceRecord): Promise<GetAttendanceRecord> {
+export async function createAttendanceRecord(payload: PostAttendance): Promise<GetAttendance> {
   try {
     const db = getDb();
-    const collection = db.collection<PostAttendanceRecord>(COLLECTIONS.ATTENDANCE);
+    const collection = db.collection<PostAttendance>(COLLECTIONS.ATTENDANCE);
     const result = await collection.insertOne(payload);
     if (!result.acknowledged) {
       throw new Error('Failed to create attendance record');
     }
-    return payload as unknown as GetAttendanceRecord;
+    return payload as unknown as GetAttendance;
   } catch (error) {
     throw new Error('Failed to create attendance record');
   }
 }
 
-export async function updateAttendanceRecordById(attendance_id: string, id: string, payload: PatchAttendanceRecord): Promise<GetAttendanceRecord> {
+export async function updateAttendanceRecordById(attendance_id: string, id: string, payload: PatchAttendance): Promise<GetAttendance> {
   try {
     const db = getDb();
-    const collection = db.collection<PatchAttendanceRecord>(COLLECTIONS.ATTENDANCE);
+    const collection = db.collection<PatchAttendance>(COLLECTIONS.ATTENDANCE);
     const result = await collection.findOneAndUpdate(
       { id, attendance_id },
       { $set: { ...payload, updated_at: new Date().toISOString() } },
       { returnDocument: 'after' }
-    ) as GetAttendanceRecord | null;
+    ) as GetAttendance | null;
 
     if (!result) {
       throw new Error('Attendance record not found');
@@ -71,7 +71,7 @@ export async function updateAttendanceRecordById(attendance_id: string, id: stri
 export async function deleteAttendanceRecordById(attendance_id: string, id: string): Promise<boolean> {
   try {
     const db = getDb();
-    const collection = db.collection<GetAttendanceRecord>(COLLECTIONS.ATTENDANCE);
+    const collection = db.collection<GetAttendance>(COLLECTIONS.ATTENDANCE);
     const result = await collection.deleteOne({ id, attendance_id });
     return result.deletedCount > 0;
   } catch (error) {
