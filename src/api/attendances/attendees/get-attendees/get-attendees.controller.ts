@@ -5,6 +5,12 @@ import { GetAttendeesQuerySchema } from "../attendees.model.js";
 export async function getAttendeesController(c: Context) {
   try {
     const attendanceId = c.req.param('id');
+    if (!attendanceId) {
+      return c.json({ error: 'Attendance id is required' }, 400);
+    }
+
+    const pageParam = c.req.query('page');
+    const limitParam = c.req.query('limit');
     
     // Parse query with coerce to convert string numbers to actual numbers
     const query = GetAttendeesQuerySchema.parse({
@@ -12,8 +18,8 @@ export async function getAttendeesController(c: Context) {
       department: c.req.query('department') ?? '',
       year_level: c.req.query('year_level') ?? '',
       section: c.req.query('section') ?? '',
-      page: c.req.query('page') ? parseInt(c.req.query('page'), 10) : 1,
-      limit: c.req.query('limit') ? parseInt(c.req.query('limit'), 10) : 10,
+      page: pageParam ? parseInt(pageParam, 10) : 1,
+      limit: limitParam ? parseInt(limitParam, 10) : 10,
     });
     
     const result = await getAttendees(attendanceId, query);
