@@ -1,14 +1,14 @@
 import { Context } from "hono";
-import { getAttendanceRecordById } from "../attendance.service.js";
+import { getAttendanceById } from "../attendance.service.js";
 import { ZodError } from "zod";
 
-export async function getAttendanceRecordController(c: Context) {
+export async function getAttendanceController(c: Context) {
   try {
-    const { attendances_id, id } = c.req.param();
-    if (!attendances_id || !id) {
+    const { attendance_id, id } = c.req.param();
+    if (!attendance_id || !id) {
       return c.json({ error: "attendance_id and id are required" }, 400);
     }
-    const attendance = await getAttendanceRecordById(attendances_id, id);
+    const attendance = await getAttendanceById(attendance_id, id);
     if (!attendance) {
       return c.json({ error: 'Attendance record not found' }, 404);
     }

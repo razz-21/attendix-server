@@ -3,7 +3,7 @@ import { getDb } from "../../../config/db.config.js";
 import { GetAttendance, GetAttendancesQuery, PatchAttendance, PostAttendance } from "./attendance.model.js";
 import { Filter } from "mongodb";
 
-export async function getAttendanceRecords(attendance_id: string, params: GetAttendancesQuery): Promise<GetAttendance[]> {
+export async function getAttendance(attendance_id: string, params: GetAttendancesQuery): Promise<GetAttendance[]> {
   try {
     const db = getDb();
     const collection = db.collection<GetAttendance>(COLLECTIONS.ATTENDANCE);
@@ -24,7 +24,7 @@ export async function getAttendanceRecords(attendance_id: string, params: GetAtt
   }
 }
 
-export async function getAttendanceRecordById(attendance_id: string, id: string): Promise<GetAttendance | null> {
+export async function getAttendanceById(attendance_id: string, id: string): Promise<GetAttendance | null> {
   try {
     const db = getDb();
     const collection = db.collection<GetAttendance>(COLLECTIONS.ATTENDANCE);
@@ -34,7 +34,7 @@ export async function getAttendanceRecordById(attendance_id: string, id: string)
   }
 }
 
-export async function createAttendanceRecord(payload: PostAttendance): Promise<GetAttendance> {
+export async function createAttendance(payload: PostAttendance): Promise<GetAttendance> {
   try {
     const db = getDb();
     const collection = db.collection<PostAttendance>(COLLECTIONS.ATTENDANCE);
@@ -48,7 +48,7 @@ export async function createAttendanceRecord(payload: PostAttendance): Promise<G
   }
 }
 
-export async function updateAttendanceRecordById(attendance_id: string, id: string, payload: PatchAttendance): Promise<GetAttendance> {
+export async function updateAttendanceById(attendance_id: string, id: string, payload: PatchAttendance): Promise<GetAttendance> {
   try {
     const db = getDb();
     const collection = db.collection<PatchAttendance>(COLLECTIONS.ATTENDANCE);
@@ -68,7 +68,7 @@ export async function updateAttendanceRecordById(attendance_id: string, id: stri
   }
 }
 
-export async function deleteAttendanceRecordById(attendance_id: string, id: string): Promise<boolean> {
+export async function deleteAttendanceById(attendance_id: string, id: string): Promise<boolean> {
   try {
     const db = getDb();
     const collection = db.collection<GetAttendance>(COLLECTIONS.ATTENDANCE);
