@@ -1,4 +1,4 @@
-import { OpenAPIHono } from "@hono/zod-openapi";
+﻿import { OpenAPIHono } from "@hono/zod-openapi";
 import { GetAttendancesRoute } from "./get-attendances/get-attendances.route.js";
 import { getAttendances } from "./get-attendances/get-attendances.controller.js";
 import { GetAttendanceRoute } from "./get-attendance/get-attendance.route.js";
@@ -9,6 +9,7 @@ import { PatchAttendanceRoute } from "./patch-attendance/patch-attendance.route.
 import { patchAttendance } from "./patch-attendance/patch-attendance.controller.js";
 import { DeleteAttendanceRoute } from "./delete-attendance/delete-attendance.route.js";
 import { deleteAttendance } from "./delete-attendance/delete-attendance.controller.js";
+import attendanceRecordRoutes from "./attendance/attendance.routes.js";
 
 // Attendees routes and controllers
 import { GetAttendeesRoute } from "./attendees/get-attendees/get-attendees.route.js";
@@ -36,4 +37,7 @@ attendanceRoutes.openapi(GetAttendeeRoute, getAttendeeController);
 attendanceRoutes.openapi(PostAttendeeRoute, postAttendeeController);
 attendanceRoutes.openapi(PatchAttendeeRoute, patchAttendeeController);
 attendanceRoutes.openapi(DeleteAttendeeRoute, deleteAttendeeController);
+
+attendanceRoutes.route('/', attendanceRecordRoutes);
+
 export default attendanceRoutes;
