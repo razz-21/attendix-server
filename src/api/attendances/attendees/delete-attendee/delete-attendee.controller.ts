@@ -3,14 +3,14 @@ import { deleteAttendee } from "../attendees.service.js";
 
 export async function deleteAttendeeController(c: Context) {
   try {
-    const attendanceId = c.req.param('id');
-    const attendeeId = c.req.param('attendees_record_id');
+    const attendancesId = c.req.param('attendances_id');
+    const attendeeId = c.req.param('attendee_id');
 
-    if (!attendanceId || !attendeeId) {
+    if (!attendancesId || !attendeeId) {
       return c.json({ error: 'Attendance ID and attendee ID are required' }, 400);
     }
     
-    const deleted = await deleteAttendee(attendanceId, attendeeId);
+    const deleted = await deleteAttendee(attendancesId, attendeeId);
     
     if (!deleted) {
       return c.json({ error: 'Attendee not found' }, 404);

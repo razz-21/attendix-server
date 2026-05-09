@@ -5,15 +5,15 @@ import { ZodError } from "zod";
 
 export async function patchAttendeeController(c: Context) {
   try {
-    const attendanceId = c.req.param('id');
-    const attendeeId = c.req.param('attendees_record_id');
-    if (!attendanceId || !attendeeId) {
+    const attendancesId = c.req.param('attendances_id');
+    const attendeeId = c.req.param('attendee_id');
+    if (!attendancesId || !attendeeId) {
       return c.json({ error: 'Attendance id and attendee id are required' }, 400);
     }
 
     const payload = PatchAttendeeSchema.parse(await c.req.json<PatchAttendee>());
     
-    const attendee = await updateAttendee(attendanceId, attendeeId, payload);
+    const attendee = await updateAttendee(attendancesId, attendeeId, payload);
     
     if (!attendee) {
       return c.json({ error: 'Attendee not found' }, 404);

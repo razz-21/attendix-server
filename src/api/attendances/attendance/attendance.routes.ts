@@ -10,12 +10,12 @@ import { patchAttendanceRecordController } from "./patch-attendance/patch-attend
 import { DeleteAttendanceRecordRoute } from "./delete-attendance/delete-attendance.route.js";
 import { deleteAttendanceRecordController } from "./delete-attendance/delete-attendance.controller.js";
 
-const attendanceRecordRoutes = new OpenAPIHono();
+const attendanceRoutes = new OpenAPIHono();
 
-attendanceRecordRoutes.openapi(GetAttendanceRecordsRoute, getAttendanceRecordsController);
-attendanceRecordRoutes.openapi(GetAttendanceRecordRoute, getAttendanceRecordController);
-attendanceRecordRoutes.openapi(PostAttendanceRecordRoute, postAttendanceRecordController);
-attendanceRecordRoutes.openapi(PatchAttendanceRecordRoute, patchAttendanceRecordController);
-attendanceRecordRoutes.openapi(DeleteAttendanceRecordRoute, deleteAttendanceRecordController);
+attendanceRoutes.openapi(GetAttendanceRecordsRoute, getAttendanceRecordsController);
+attendanceRoutes.openapi(GetAttendanceRecordRoute, getAttendanceRecordController);
+attendanceRoutes.openapi(PostAttendanceRecordRoute, postAttendanceRecordController);
+attendanceRoutes.openapi(PatchAttendanceRecordRoute, patchAttendanceRecordController);
+attendanceRoutes.openapi(DeleteAttendanceRecordRoute, deleteAttendanceRecordController);
 
-export default attendanceRecordRoutes;
+export default attendanceRoutes;

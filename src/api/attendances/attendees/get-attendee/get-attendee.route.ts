@@ -3,13 +3,13 @@ import { z } from "@hono/zod-openapi";
 import { AttendeeSchema } from "../attendees.model.js";
 
 export const GetAttendeeRoute = createRoute({
-  path: '/:id/attendees/{attendees_record_id}',
+  path: '/:attendee_id',
   method: 'get',
   request: {
     params: z.object({
-      id: z.string().uuid('Invalid attendance ID').openapi({
+      attendances_id: z.string().uuid('Invalid attendances ID').openapi({
         param: {
-          name: 'id',
+          name: 'attendances_id',
           in: 'path',
         },
         description: 'Attendance ID',

@@ -5,9 +5,9 @@ import { ZodError } from "zod";
 
 export async function postAttendanceRecordController(c: Context) {
   try {
-    const { attendance_id } = c.req.param();
-    if (!attendance_id) {
-      return c.json({ error: "attendance_id is required" }, 400);
+    const { attendances_id } = c.req.param();
+    if (!attendances_id) {
+      return c.json({ error: "attendances_id is required" }, 400);
     }
     const body = await c.req.json();
 
@@ -18,7 +18,7 @@ export async function postAttendanceRecordController(c: Context) {
       return c.json({ error: 'end_time must be later than start_time' }, 400);
     }
 
-    const payload = PostAttendanceSchema.parse({ ...body, attendance_id });
+    const payload = PostAttendanceSchema.parse({ ...body, attendances_id });
     const record = await createAttendanceRecord(payload);
     return c.json(record, 201);
   } catch (error) {

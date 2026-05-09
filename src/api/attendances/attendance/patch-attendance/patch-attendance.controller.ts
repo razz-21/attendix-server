@@ -5,9 +5,9 @@ import { ZodError } from "zod";
 
 export async function patchAttendanceRecordController(c: Context) {
   try {
-    const { attendance_id, id } = c.req.param();
-    if (!attendance_id || !id) {
-      return c.json({ error: "attendance_id and id are required" }, 400);
+    const { attendances_id, id } = c.req.param();
+    if (!attendances_id || !id) {
+      return c.json({ error: "attendances_id and id are required" }, 400);
     }
     const body = await c.req.json();
 
@@ -21,7 +21,7 @@ export async function patchAttendanceRecordController(c: Context) {
     }
 
     const payload = PatchAttendanceSchema.parse(body);
-    const attendance = await updateAttendanceRecordById(attendance_id, id, payload);
+    const attendance = await updateAttendanceRecordById(attendances_id, id, payload);
     return c.json(attendance, 200);
   } catch (error) {
     if (error instanceof ZodError) {

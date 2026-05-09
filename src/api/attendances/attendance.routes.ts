@@ -9,32 +9,18 @@ import { PatchAttendanceRoute } from "./patch-attendance/patch-attendance.route.
 import { patchAttendance } from "./patch-attendance/patch-attendance.controller.js";
 import { DeleteAttendanceRoute } from "./delete-attendance/delete-attendance.route.js";
 import { deleteAttendance } from "./delete-attendance/delete-attendance.controller.js";
-import attendanceRecordRoutes from "./attendance/attendance.routes.js";
+import attendeesRoutes from "./attendees/attendees.routes.js";
+import attendanceRoutes from "./attendance/attendance.routes.js";
 
-// Attendees routes and controllers
-import { GetAttendeesRoute } from "./attendees/get-attendees/get-attendees.route.js";
-import { getAttendeesController } from "./attendees/get-attendees/get-attendees.controller.js";
-import { GetAttendeeRoute } from "./attendees/get-attendee/get-attendee.route.js";
-import { getAttendeeController } from "./attendees/get-attendee/get-attendee.controller.js";
-import { PostAttendeeRoute } from "./attendees/post-attendee/post-attendee.route.js";
-import { postAttendeeController } from "./attendees/post-attendee/post-attendee.controller.js";
-import { PatchAttendeeRoute } from "./attendees/patch-attendee/patch-attendee.route.js";
-import { patchAttendeeController } from "./attendees/patch-attendee/patch-attendee.controller.js";
-import { DeleteAttendeeRoute } from "./attendees/delete-attendee/delete-attendee.route.js";
-import { deleteAttendeeController } from "./attendees/delete-attendee/delete-attendee.controller.js";
+const attendancesRoutes = new OpenAPIHono();
 
-const attendanceRoutes = new OpenAPIHono();
+attendancesRoutes.openapi(GetAttendancesRoute, getAttendances);
+attendancesRoutes.openapi(GetAttendanceRoute, getAttendance);
+attendancesRoutes.openapi(PostAttendanceRoute, postAttendance);
+attendancesRoutes.openapi(PatchAttendanceRoute, patchAttendance);
+attendancesRoutes.openapi(DeleteAttendanceRoute, deleteAttendance);
 
-attendanceRoutes.openapi(GetAttendancesRoute, getAttendances);
-attendanceRoutes.openapi(GetAttendanceRoute, getAttendance);
-attendanceRoutes.openapi(PostAttendanceRoute, postAttendance);
-attendanceRoutes.openapi(PatchAttendanceRoute, patchAttendance);
-attendanceRoutes.openapi(DeleteAttendanceRoute, deleteAttendance);
+attendancesRoutes.route('/:attendances_id/attendance', attendanceRoutes);
+attendancesRoutes.route('/:attendances_id/attendees', attendeesRoutes);
 
-// Attendees routes - mount at root level (routes now include full path)
-attendanceRoutes.openapi(GetAttendeesRoute, getAttendeesController);
-attendanceRoutes.openapi(GetAttendeeRoute, getAttendeeController);
-attendanceRoutes.openapi(PostAttendeeRoute, postAttendeeController);
-attendanceRoutes.openapi(PatchAttendeeRoute, patchAttendeeController);
-attendanceRoutes.openapi(DeleteAttendeeRoute, deleteAttendeeController);
-export default attendanceRoutes;
+export default attendancesRoutes;

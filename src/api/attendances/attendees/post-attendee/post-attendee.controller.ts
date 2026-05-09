@@ -5,11 +5,11 @@ import { ZodError } from "zod";
 
 export async function postAttendeeController(c: Context) {
   try {
-    const attendanceId = c.req.param('id');
+    const attendancesId = c.req.param('attendances_id');
     const payload = PostAttendeeSchema.parse(await c.req.json<PostAttendee>());
     
     // Validate that attendance_id in payload matches URL parameter
-    if (payload.attendance_id !== attendanceId) {
+    if (payload.attendance_id !== attendancesId) {
       return c.json({ error: 'Attendance ID in payload does not match URL parameter' }, 400);
     }
     

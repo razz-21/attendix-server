@@ -4,11 +4,11 @@ import { ZodError } from "zod";
 
 export async function deleteAttendanceRecordController(c: Context) {
   try {
-    const { attendance_id, id } = c.req.param();
-    if (!attendance_id || !id) {
-      return c.json({ error: "attendance_id and id are required" }, 400);
+    const { attendances_id, id } = c.req.param();
+    if (!attendances_id || !id) {
+      return c.json({ error: "attendances_id and id are required" }, 400);
     }
-    const result = await deleteAttendanceRecordById(attendance_id, id);
+    const result = await deleteAttendanceRecordById(attendances_id, id);
     if (!result) {
       return c.json({ error: 'Attendance record not found' }, 404);
     }

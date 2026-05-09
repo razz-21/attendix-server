@@ -4,8 +4,8 @@ import { GetAttendeesQuerySchema } from "../attendees.model.js";
 
 export async function getAttendeesController(c: Context) {
   try {
-    const attendanceId = c.req.param('id');
-    if (!attendanceId) {
+    const attendancesId = c.req.param('attendances_id');
+    if (!attendancesId) {
       return c.json({ error: 'Attendance id is required' }, 400);
     }
 
@@ -22,7 +22,7 @@ export async function getAttendeesController(c: Context) {
       limit: limitParam ? parseInt(limitParam, 10) : 10,
     });
     
-    const result = await getAttendees(attendanceId, query);
+    const result = await getAttendees(attendancesId, query);
     
     // Return paginated response
     const page = query.page ?? 1;

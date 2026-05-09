@@ -3,14 +3,14 @@ import { getAttendeeById } from "../attendees.service.js";
 
 export async function getAttendeeController(c: Context) {
   try {
-    const attendanceId = c.req.param('id');
-    const attendeeId = c.req.param('attendees_record_id');
+    const attendancesId = c.req.param('attendances_id');
+    const attendeeId = c.req.param('attendee_id');
     
-    if (!attendanceId || !attendeeId) {
+    if (!attendancesId || !attendeeId) {
       return c.json({ error: 'Missing required parameters' }, 400);
     }
     
-    const attendee = await getAttendeeById(attendanceId, attendeeId);
+    const attendee = await getAttendeeById(attendancesId, attendeeId);
     
     if (!attendee) {
       return c.json({ error: 'Attendee not found' }, 404);

@@ -5,12 +5,12 @@ import { ZodError } from "zod";
 
 export async function getAttendanceRecordsController(c: Context) {
   try {
-    const { attendance_id } = c.req.param();
-    if (!attendance_id) {
-      return c.json({ error: "attendance_id is required" }, 400);
+    const { attendances_id } = c.req.param();
+    if (!attendances_id) {
+      return c.json({ error: "attendances_id is required" }, 400);
     }
     const params = GetAttendancesQuerySchema.parse(c.req.query());
-    const attendance = await getAttendanceRecords(attendance_id, params);
+    const attendance = await getAttendanceRecords(attendances_id, params);
     return c.json(attendance, 200);
   } catch (error) {
     if (error instanceof ZodError) {
