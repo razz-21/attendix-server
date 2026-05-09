@@ -7,6 +7,10 @@ export async function patchAttendeeController(c: Context) {
   try {
     const attendanceId = c.req.param('id');
     const attendeeId = c.req.param('attendees_record_id');
+    if (!attendanceId || !attendeeId) {
+      return c.json({ error: 'Attendance id and attendee id are required' }, 400);
+    }
+
     const payload = PatchAttendeeSchema.parse(await c.req.json<PatchAttendee>());
     
     const attendee = await updateAttendee(attendanceId, attendeeId, payload);
