@@ -5,6 +5,10 @@ export async function deleteAttendeeController(c: Context) {
   try {
     const attendanceId = c.req.param('id');
     const attendeeId = c.req.param('attendees_record_id');
+
+    if (!attendanceId || !attendeeId) {
+      return c.json({ error: 'Attendance ID and attendee ID are required' }, 400);
+    }
     
     const deleted = await deleteAttendee(attendanceId, attendeeId);
     
