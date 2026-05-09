@@ -2,10 +2,10 @@ import { createRoute, z } from "@hono/zod-openapi";
 import { GetAttendanceSchema, GetAttendancesQuerySchema } from "../attendance.model.js";
 
 export const GetAttendancesRoute = createRoute({
-  path: '/:attendance_id/records',
+  path: '/',
   method: 'get',
   request: {
-    params: z.object({ attendance_id: z.string() }),
+    params: z.object({ attendances_id: z.string() }),
     query: GetAttendancesQuerySchema,
   },
   responses: {
