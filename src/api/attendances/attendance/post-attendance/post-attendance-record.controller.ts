@@ -1,25 +1,18 @@
 import { Context } from "hono";
-import { createAttendanceRecord } from "../attendance.service.js";
+import { createAttendance } from "../attendance.service.js";
 import { PostAttendanceSchema } from "../attendance.model.js";
 import { ZodError } from "zod";
 
-export async function postAttendanceRecordController(c: Context) {
+export async function postAttendanceController(c: Context) {
   try {
-    const { attendances_id } = c.req.param();
-    if (!attendances_id) {
+    const { attendance_id } = c.req.param();
+    if (!attendance_id) {
       return c.json({ error: "attendances_id is required" }, 400);
     }
     const body = await c.req.json();
 
-    // Validate end_time > start_time
-    const startTime = new Date(`1970-01-01 ${body.start_time}`);
-    const endTime = new Date(`1970-01-01 ${body.end_time}`);
-    if (endTime <= startTime) {
-      return c.json({ error: 'end_time must be later than start_time' }, 400);
-    }
-
-    const payload = PostAttendanceSchema.parse({ ...body, attendances_id });
-    const record = await createAttendanceRecord(payload);
+    const payload = PostAttendanceSchema.parse({ ...body, attendance_id });
+    const record = await createAttendance(payload);
     return c.json(record, 201);
   } catch (error) {
     if (error instanceof ZodError) {

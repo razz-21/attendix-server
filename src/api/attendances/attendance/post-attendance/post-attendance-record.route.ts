@@ -1,11 +1,11 @@
 import { createRoute, z } from "@hono/zod-openapi";
 import { GetAttendanceSchema, PostAttendanceSchema } from "../attendance.model.js";
 
-export const PostAttendanceRecordRoute = createRoute({
-  path: '/',
+export const PostAttendanceRoute = createRoute({
+  path: '/:attendance_id/records',
   method: 'post',
   request: {
-    params: z.object({ attendances_id: z.string() }),
+    params: z.object({ attendance_id: z.string() }),
     body: {
       content: { 'application/json': { schema: PostAttendanceSchema } },
     },

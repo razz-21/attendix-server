@@ -1,14 +1,14 @@
 import { Context } from "hono";
-import { deleteAttendanceRecordById } from "../attendance.service.js";
+import { deleteAttendanceById } from "../attendance.service.js";
 import { ZodError } from "zod";
 
-export async function deleteAttendanceRecordController(c: Context) {
+export async function deleteAttendanceController(c: Context) {
   try {
-    const { attendances_id, id } = c.req.param();
-    if (!attendances_id || !id) {
+    const { attendance_id, id } = c.req.param();
+    if (!attendance_id || !id) {
       return c.json({ error: "attendances_id and id are required" }, 400);
     }
-    const result = await deleteAttendanceRecordById(attendances_id, id);
+    const result = await deleteAttendanceById(attendance_id, id);
     if (!result) {
       return c.json({ error: 'Attendance record not found' }, 404);
     }
