@@ -1,0 +1,37 @@
+import { Context } from "hono";
+import { PatchAttendee, PatchAttendeeSchema } from "../attendees.model.js";
+import { updateAttendee } from "../attendees.service.js";
+import { ZodError } from "zod";
+
+export async function patchAttendeeController(c: Context) {
+  try {
+    const attendancesId = c.req.param('attendances_id');
+    const attendeeId = c.req.param('attendee_id');
+    if (!attendancesId || !attendeeId) {
+      return c.json({ error: 'Attendance id and attendee id are required' }, 400);
+    }
+
+    const payload = PatchAttendeeSchema.parse(await c.req.json<PatchAttendee>());
+    
+    const attendee = await updateAttendee(attendancesId, attendeeId, payload);
+    
+    if (!attendee) {
+      return c.json({ error: 'Attendee not found' }, 404);
+    }
+    
+    return c.json(attendee, 200);
+  } catch (error) {
+    if (error instanceof ZodError) {
+      return c.json({ error: 'Validation failed', details: error.issues }, 400);
+    }
+    
+    const errorMessage = error instanceof Error ? error.message : 'Failed to update attendee';
+    
+    // Check if it's a duplicate RFID error
+    if (errorMessage.includes('RFID already exists')) {
+      return c.json({ error: errorMessage }, 409); // Conflict status code
+    }
+    
+    return c.json({ error: errorMessage }, 500);
+  }
+}

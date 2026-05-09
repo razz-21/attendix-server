@@ -9,13 +9,18 @@ import { PatchAttendanceRoute } from "./patch-attendance/patch-attendance.route.
 import { patchAttendance } from "./patch-attendance/patch-attendance.controller.js";
 import { DeleteAttendanceRoute } from "./delete-attendance/delete-attendance.route.js";
 import { deleteAttendance } from "./delete-attendance/delete-attendance.controller.js";
+import attendeesRoutes from "./attendees/attendees.routes.js";
+import attendanceRoutes from "./attendance/attendance.routes.js";
 
-const attendanceRoutes = new OpenAPIHono();
+const attendancesRoutes = new OpenAPIHono();
 
-attendanceRoutes.openapi(GetAttendancesRoute, getAttendances);
-attendanceRoutes.openapi(GetAttendanceRoute, getAttendance);
-attendanceRoutes.openapi(PostAttendanceRoute, postAttendance);
-attendanceRoutes.openapi(PatchAttendanceRoute, patchAttendance);
-attendanceRoutes.openapi(DeleteAttendanceRoute, deleteAttendance);
+attendancesRoutes.openapi(GetAttendancesRoute, getAttendances);
+attendancesRoutes.openapi(GetAttendanceRoute, getAttendance);
+attendancesRoutes.openapi(PostAttendanceRoute, postAttendance);
+attendancesRoutes.openapi(PatchAttendanceRoute, patchAttendance);
+attendancesRoutes.openapi(DeleteAttendanceRoute, deleteAttendance);
 
-export default attendanceRoutes;
+attendancesRoutes.route('/:attendances_id/attendance', attendanceRoutes);
+attendancesRoutes.route('/:attendances_id/attendees', attendeesRoutes);
+
+export default attendancesRoutes;

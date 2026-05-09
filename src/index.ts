@@ -37,6 +37,7 @@ app.route('/api/v1/workspaces', workspaceRoutes);
 app.route('/api/v1/groups', groupRoutes); 
 app.route('/api/v1/attendances', attendanceRoutes);
 
+
 app.doc('/docs', {
   openapi: '3.0.0',
   info: {
