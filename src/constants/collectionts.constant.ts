@@ -6,4 +6,5 @@ export const COLLECTIONS = {
   ATTENDANCES: 'attendances',
   ATTENDANCE: 'attendance', 
   ATTENDANCE_ATTENDEES: 'attendance_attendees',
+  ATTENDANCE_RECORDS: 'attendance_records',
 };

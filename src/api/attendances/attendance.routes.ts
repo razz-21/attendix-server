@@ -11,8 +11,12 @@ import { DeleteAttendanceRoute } from "./delete-attendance/delete-attendance.rou
 import { deleteAttendance } from "./delete-attendance/delete-attendance.controller.js";
 import attendeesRoutes from "./attendees/attendees.routes.js";
 import attendanceRoutes from "./attendance/attendance.routes.js";
+import attendanceRecordRoutes from "./attendance-record/attendance-record.routes.js";
+import { authMiddleware } from "../../middleware/auth.middleware.js";
 
-const attendancesRoutes = new OpenAPIHono();
+const attendancesRoutes = new OpenAPIHono()
+
+attendancesRoutes.use("*", authMiddleware);
 
 attendancesRoutes.openapi(GetAttendancesRoute, getAttendances);
 attendancesRoutes.openapi(GetAttendanceRoute, getAttendance);
@@ -22,5 +26,6 @@ attendancesRoutes.openapi(DeleteAttendanceRoute, deleteAttendance);
 
 attendancesRoutes.route('/:attendances_id/attendance', attendanceRoutes);
 attendancesRoutes.route('/:attendances_id/attendees', attendeesRoutes);
+attendancesRoutes.route('/:attendances_id/attendance-record', attendanceRecordRoutes);
 
 export default attendancesRoutes;

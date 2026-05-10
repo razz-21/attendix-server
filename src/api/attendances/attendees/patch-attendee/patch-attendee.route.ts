@@ -15,14 +15,6 @@ export const PatchAttendeeRoute = createRoute({
         description: 'Attendance ID',
         example: '123e4567-e89b-12d3-a456-426614174000',
       }),
-      attendees_record_id: z.string().uuid('Invalid attendee ID').openapi({
-        param: {
-          name: 'attendees_record_id',
-          in: 'path',
-        },
-        description: 'Attendee record ID',
-        example: '123e4567-e89b-12d3-a456-426614174000',
-      }),
     }),
     body: {
       content: {
