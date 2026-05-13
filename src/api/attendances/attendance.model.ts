@@ -8,6 +8,25 @@ export const AttendanceStatusSchema = z.enum(['active', 'archived']).openapi({
   description: 'The status of the attendance record',
 });
 
+export const AttendanceConfigurationsSchema = z.object({
+  present_point: z.number().multipleOf(0.01).min(0).openapi({
+    description: 'Points for present attendance',
+    example: 1.0,
+  }),
+  late_point: z.number().multipleOf(0.01).min(0).openapi({
+    description: 'Points for late attendance',
+    example: 0.5,
+  }),
+  absent_point: z.number().multipleOf(0.01).min(0).openapi({
+    description: 'Points for absent attendance',
+    example: 0,
+  }),
+  excused_point: z.number().multipleOf(0.01).min(0).openapi({
+    description: 'Points for excused attendance',
+    example: 0.75,
+  }),
+}).openapi('AttendanceConfigurations');
+
 export const AttendanceSchema = z.object({
   id: z.uuidv4().default(crypto.randomUUID()).openapi({
     description: 'The unique identifier for the attendance record',
@@ -44,8 +63,10 @@ export const AttendanceSchema = z.object({
     .min(0, 'Late threshold must be a non-negative integer')
     .openapi({
       description: 'Number of minutes after start_time before a student is considered late',
-    }
-  ),
+    }),
+    configurations: AttendanceConfigurationsSchema.optional().openapi({
+    description: 'Attendance point configurations',
+  }),
   status: AttendanceStatusSchema,
   created_by: z.uuidv4().openapi({
     description: 'UUID of the user who created this attendance record',
@@ -81,3 +102,4 @@ export type PostAttendance = z.infer<typeof PostAttendanceSchema>;
 export type PatchAttendance = z.infer<typeof PatchAttendanceSchema>;
 export type DeleteAttendance = z.infer<typeof DeleteAttendanceSchema>;
 export type GetAttendancesQuery = z.infer<typeof GetAttendancesQuerySchema>;
+export type AttendanceConfigurations = z.infer<typeof AttendanceConfigurationsSchema>;
