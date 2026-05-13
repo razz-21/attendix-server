@@ -1,7 +1,8 @@
 import { COLLECTIONS } from "../../../constants/collectionts.constant.js";
 import { getDb } from "../../../config/db.config.js";
-import { GetAttendee, GetAttendeesQuery, PatchAttendee, PostAttendee } from "./attendees.model.js";
+import { GetAttendee, GetAttendeesQuery, PatchAttendee, PostAttendee, ImportGroupResponse } from "./attendees.model.js";
 import { Filter } from "mongodb";
+import { GetGroupMember } from "../../groups/group-member/groups-member.model.js";
 
 export async function getAttendeeById(attendanceId: string, attendeeId: string): Promise<GetAttendee | null> {
   try {
@@ -154,5 +155,75 @@ export async function deleteAttendee(attendanceId: string, attendeeId: string): 
     return result.deletedCount > 0;
   } catch (error) {
     throw new Error('Failed to delete attendee');
+  }
+}
+
+export async function importGroupAttendees(attendanceId: string, groupId: string): Promise<ImportGroupResponse> {
+  try {
+    const db = getDb();
+    
+    // Fetch group members
+    const groupMembersCollection = db.collection<GetGroupMember>(COLLECTIONS.GROUP_MEMBERS);
+    const members = await groupMembersCollection.find({ group_id: groupId }).toArray();
+
+    if (!members.length) {
+      throw new Error('Group is empty or does not exist');
+    }
+
+    // Fetch existing attendees to prevent duplicates by RFID
+    const attendeesCollection = db.collection<GetAttendee>(COLLECTIONS.ATTENDANCE_ATTENDEES);
+    const existingAttendees = await attendeesCollection.find({ attendance_id: attendanceId }).toArray();
+    
+    // We can only deduplicate based on RFIDs since names can overlap but RFID is strictly unique
+    const existingRfids = new Set(
+      existingAttendees
+        .map(a => a.rfid?.trim())
+        .filter(rfid => rfid !== undefined && rfid !== '')
+    );
+
+    const newAttendees: GetAttendee[] = [];
+    const now = new Date();
+
+    for (const member of members) {
+      const rfid = member.rfid?.trim();
+      
+      // Skip if RFID exists and is non-empty
+      if (rfid && existingRfids.has(rfid)) {
+        continue;
+      }
+      
+      newAttendees.push({
+        id: crypto.randomUUID(),
+        attendance_id: attendanceId,
+        rfid: member.rfid,
+        name: member.name,
+        department: member.department,
+        year_level: member.year_level,
+        section: member.section,
+        created_at: now,
+        updated_at: now,
+      });
+    }
+
+    if (newAttendees.length === 0) {
+      return { 
+        count: 0, 
+        message: 'No new attendees to import. All group members might already exist in this attendance.' 
+      };
+    }
+
+    const result = await attendeesCollection.insertMany(newAttendees);
+    if (!result.acknowledged) {
+      throw new Error('Failed to import attendees');
+    }
+
+    return {
+      count: result.insertedCount,
+      message: `Successfully imported ${result.insertedCount} attendee(s).`
+    };
+  } catch (error) {
+    console.error('Error in importGroupAttendees:', error);
+    const message = error instanceof Error ? error.message : 'Failed to import attendees';
+    throw new Error(message);
   }
 }
