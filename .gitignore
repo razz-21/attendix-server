@@ -8,6 +8,9 @@
 .idea/usage.statistics.xml
 .idea/shelf
 
+# package
+package-lock.json
+
 # deps
 node_modules/
 
