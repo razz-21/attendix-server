@@ -12,15 +12,6 @@ export const patchAttendanceRecordController = async (c: Context) => {
 
     const body = await c.req.json();
 
-    if (body.status === 'excused') {
-      if (!body.reason_type) {
-        return c.json({ error: 'Reason type is required for excused status' }, 400);
-      }
-      if (!body.reason) {
-        return c.json({ error: 'Reason is required for excused status' }, 400);
-      }
-    }
-    
     const payload = PatchAttendanceRecordSchema.parse({ ...body });
     const record = await updateAttendanceRecord(id, payload);
     return c.json(record, 200); 
