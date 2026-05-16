@@ -9,10 +9,13 @@ import { PatchAttendeeRoute } from "./patch-attendee/patch-attendee.route.js";
 import { patchAttendeeController } from "./patch-attendee/patch-attendee.controller.js";
 import { DeleteAttendeeRoute } from "./delete-attendee/delete-attendee.route.js";
 import { deleteAttendeeController } from "./delete-attendee/delete-attendee.controller.js";
+import { ImportGroupRoute } from "./import-group/import-group.route.js";
+import { importGroupController } from "./import-group/import-group.controller.js";
 
 const attendeesRoutes = new OpenAPIHono();
 
 attendeesRoutes.openapi(GetAttendeesRoute, getAttendeesController);
+attendeesRoutes.openapi(ImportGroupRoute, importGroupController);
 attendeesRoutes.openapi(GetAttendeeRoute, getAttendeeController);
 attendeesRoutes.openapi(PostAttendeeRoute, postAttendeeController);
 attendeesRoutes.openapi(PatchAttendeeRoute, patchAttendeeController);

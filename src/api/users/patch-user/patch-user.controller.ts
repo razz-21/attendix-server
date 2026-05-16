@@ -1,9 +1,8 @@
 import { Context } from "hono";
 import { PatchUser, PatchUserSchema } from "../users.model.js";
 import { isUserEmailExists, isUsernameExists, updateUser } from "../users.services.js";
+import { getWorkspaceById } from "../../workspace/workspace.service.js";
 import { ZodError } from "zod";
-
-
 
 export async function patchUser(c: Context) {
   try {
@@ -22,6 +21,13 @@ export async function patchUser(c: Context) {
       return c.json({ error: 'Email already exists' }, 400);
     }
 
+    if (payload.workspace_id != null) {
+      const workspace = await getWorkspaceById(payload.workspace_id);
+      if (!workspace) {
+        return c.json({ message: 'Workspace not found or does not exist' }, 404);
+      }
+    }
+
     const body = {
       ...payload,
       updated_at: new Date().toISOString(),
@@ -33,6 +39,6 @@ export async function patchUser(c: Context) {
       return c.json({ error: 'Validation failed', details: error.issues }, 400);
     }
     const errorMessage = error instanceof Error ? error.message : 'Failed to update user';
-    return c.json({ error: errorMessage }, 500);
+    return c.json({ message: errorMessage }, 500);
   }
 }

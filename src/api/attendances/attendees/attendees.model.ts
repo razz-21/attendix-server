@@ -88,3 +88,22 @@ export const GetAttendeesQuerySchema = z.object({
 });
 
 export type GetAttendeesQuery = z.infer<typeof GetAttendeesQuerySchema>;
+
+export const ImportGroupBodySchema = z.object({
+  group_id: z.string().uuid().openapi({
+    description: 'The ID of the group to import members from'
+  })
+});
+
+export type ImportGroupBody = z.infer<typeof ImportGroupBodySchema>;
+
+export const ImportGroupResponseSchema = z.object({
+  count: z.number().openapi({
+    description: 'Number of successfully imported attendees'
+  }),
+  message: z.string().openapi({
+    description: 'Success or warning message'
+  })
+});
+
+export type ImportGroupResponse = z.infer<typeof ImportGroupResponseSchema>;
