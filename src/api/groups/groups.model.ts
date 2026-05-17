@@ -13,7 +13,7 @@ export const GroupSchema = z.object({
   description: z.string().trim().optional().openapi({
     description: 'The description of the group',
   }),
-  workspace_id: z.uuidv4().openapi({
+  workspace_id: z.string().optional().nullable().openapi({
     description: 'The unique identifier for the workspace',
   }),
   created_by: z.uuidv4().openapi({
@@ -32,7 +32,9 @@ export const GroupSchema = z.object({
 }).openapi('Group');
 
 export const GetGroupSchema = GroupSchema.openapi('GetGroup');
-export const PostGroupSchema = GroupSchema.openapi('PostGroup');
+export const PostGroupSchema = GroupSchema.extend({
+  share_to_workspace: z.boolean().optional(),
+}).openapi('PostGroup');
 export const PatchGroupSchema = GroupSchema.partial().openapi('PatchGroup');
 export const DeleteGroupSchema = GroupSchema.pick({ id: true }).openapi('DeleteGroup');
 

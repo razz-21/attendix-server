@@ -2,11 +2,17 @@ import { Context } from "hono";
 import { getGroups as getGroupsService } from "../groups.service.js";
 import { GetPaginatedGroupParamsSchema } from "../groups.model.js";
 import { ZodError } from "zod";
+import { User } from "../../users/users.model.js";
 
 export async function getGroups(c: Context) {
   try {
+    const user = c.get('user') as User;
+    if (!user || !user.id) {
+      return c.json({ error: 'Unauthorized: missing user context' }, 401);
+    }
+    
     const params = GetPaginatedGroupParamsSchema.parse(c.req.query());
-    const groups = await getGroupsService(params);
+    const groups = await getGroupsService(params, user);
     return c.json(groups, 200);
   } catch (error) {
     if (error instanceof ZodError) {

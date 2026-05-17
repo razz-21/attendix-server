@@ -1,4 +1,5 @@
 import { OpenAPIHono } from "@hono/zod-openapi";
+import { authMiddleware } from "../../middleware/auth.middleware.js";
 import { GetGroupsRoute } from "./get-groups/get-groups.route.js";
 import { getGroups } from "./get-groups/get-groups.controller.js";
 import { GetGroupRoute } from "./get-group/get-group.route.js";
@@ -21,6 +22,8 @@ import { PatchGroupMemberRoute } from "./group-member/patch-group-member/patch-g
 import { patchGroupMemberController } from "./group-member/patch-group-member/patch-group-member.controller.js";
 
 const groupRoutes = new OpenAPIHono();
+
+groupRoutes.use("*", authMiddleware);
 
 groupRoutes.openapi(GetGroupsRoute, getGroups);
 groupRoutes.openapi(GetGroupRoute, getGroup);
