@@ -34,12 +34,42 @@ export async function getGroups(params: GetPaginatedGroupParams): Promise<GetPag
     const limit = params.limit || 10;
     const skip = (page - 1) * limit;
 
-    const groups = await groupsCollection
-      .find<GetGroup>(filter)
-      .sort({ created_at: -1 })
-      .skip(skip)
-      .limit(limit)
-      .toArray();
+    const groups = await groupsCollection.aggregate<GetGroup>([
+      { $match: filter },
+      { $sort: { created_at: -1 } },
+      { $skip: skip },
+      { $limit: limit },
+      {
+        $lookup: {
+          from: COLLECTIONS.USERS,
+          localField: 'created_by',
+          foreignField: 'id',
+          as: 'creator'
+        }
+      },
+      {
+        $unwind: {
+          path: '$creator',
+          preserveNullAndEmptyArrays: true
+        }
+      },
+      {
+        $addFields: {
+          creator: {
+            $cond: {
+              if: { $ifNull: ['$creator', false] },
+              then: {
+                id: '$creator.id',
+                firstname: '$creator.firstname',
+                lastname: '$creator.lastname',
+                avatar: '$creator.avatar'
+              },
+              else: '$$REMOVE'
+            }
+          }
+        }
+      }
+    ]).toArray();
 
     const total = await groupsCollection.countDocuments(filter);
     return { data: groups, total, page, limit };
@@ -55,7 +85,21 @@ export async function createGroup(payload: PostGroup): Promise<GetGroup> {
     if (!result.acknowledged) {
       throw new Error('Failed to create group');
     }
-    return payload as unknown as GetGroup;
+    
+    const usersCollection = db.collection(COLLECTIONS.USERS);
+    const creator = await usersCollection.findOne({ id: payload.created_by }) as any;
+    
+    return {
+      ...payload,
+      ...(creator ? {
+        creator: {
+          id: creator.id,
+          firstname: creator.firstname,
+          lastname: creator.lastname,
+          avatar: creator.avatar,
+        }
+      } : {})
+    } as unknown as GetGroup;
   } catch (error) {
     throw new Error('Failed to create group');
   }
