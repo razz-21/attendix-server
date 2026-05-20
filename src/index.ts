@@ -8,6 +8,7 @@ import authRoutes from './api/auth/routes/auth.routes.js';
 import meRoutes from './api/me/me.routes.js';
 import workspaceRoutes from './api/workspace/workspace.routes.js';
 import groupRoutes from './api/groups/groups.routes.js'; 
+import dashboardRoutes from './api/dashboard/dashboard.routes.js';
 
 const app = new OpenAPIHono();
 
@@ -36,6 +37,7 @@ app.route('/api/v1/users', usersRoutes);
 app.route('/api/v1/workspaces', workspaceRoutes);
 app.route('/api/v1/groups', groupRoutes); 
 app.route('/api/v1/attendances', attendanceRoutes);
+app.route('/api/v1/dashboard', dashboardRoutes);
 
 
 app.doc('/docs', {
