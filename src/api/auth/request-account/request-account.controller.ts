@@ -1,7 +1,7 @@
-import { PostUser } from "src/api/users/users.model.js";
+import { PostUser } from "../../users/users.model.js";
 import { PostRequestAccount, PostRequestAccountSchema } from "../auth.model.js";
 import { Context } from "hono";
-import { createUser } from "src/api/users/users.services.js";
+import { createUser } from "../../users/users.services.js";
 import { ZodError } from "zod";
 
 export async function postRequestAccountController(c: Context) {

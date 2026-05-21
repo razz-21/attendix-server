@@ -1,6 +1,6 @@
-import { COLLECTIONS } from "src/constants/collectionts.constant.js";
+import { COLLECTIONS } from "../../../constants/collectionts.constant.js";
 import { DeleteAttendanceRecord, GetAttendanceRecord, PatchAttendanceRecord, PostAttendanceRecord } from "./attendance-record.model.js";
-import { getDb } from "src/config/db.config.js";
+import { getDb } from "../../../config/db.config.js";
 
 export const getAttendanceRecords = async (attendances_id: string): Promise<GetAttendanceRecord[]> => {
   try {

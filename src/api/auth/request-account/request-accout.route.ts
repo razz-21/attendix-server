@@ -1,5 +1,5 @@
-import { createRoute } from "node_modules/@hono/zod-openapi/dist/index.cjs";
-import { GetUserSchema } from "src/api/users/users.model.js";
+import { createRoute } from "@hono/zod-openapi";
+import { GetUserSchema } from "../../users/users.model.js";
 import { PostRequestAccountSchema } from "../auth.model.js";
 
 export const RequestAccountRoute = createRoute({
