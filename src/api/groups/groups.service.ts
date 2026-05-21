@@ -14,21 +14,37 @@ export async function getGroupById(id: string): Promise<GetGroup | null> {
   }
 }
 
-export async function getGroups(params: GetPaginatedGroupParams): Promise<GetPaginatedGroups> {
+export async function getGroups(params: GetPaginatedGroupParams, user: any): Promise<GetPaginatedGroups> {
   try {
     const db = getDb();
     const groupsCollection = db.collection<GetGroup>(COLLECTIONS.GROUPS);
     const searchQuery = params.q?.trim();
 
-    const filter: Filter<GetGroup> = {
-      ...(params.workspace_id ? { workspace_id: params.workspace_id } : {}),
-      ...(searchQuery ? {
-        $or: [
-          { name: { $regex: searchQuery, $options: 'i' } },
-          { description: { $regex: searchQuery, $options: 'i' } },
-        ],
-      } : {}),
+    const ownershipFilter: Filter<GetGroup> = {
+      $or: [
+        { created_by: user.id },
+        ...(user.workspace_id ? [{ workspace_id: user.workspace_id }] : []),
+      ],
     };
+
+    const searchFilter: Filter<GetGroup> = searchQuery ? {
+      $or: [
+        { name: { $regex: searchQuery, $options: 'i' } },
+        { description: { $regex: searchQuery, $options: 'i' } },
+      ],
+    } : {};
+
+    const workspaceFilter: Filter<GetGroup> = params.workspace_id ? {
+      workspace_id: params.workspace_id,
+    } : {};
+
+    const conditions = [ownershipFilter];
+    if (Object.keys(searchFilter).length > 0) conditions.push(searchFilter);
+    if (Object.keys(workspaceFilter).length > 0) conditions.push(workspaceFilter);
+
+    const filter: Filter<GetGroup> = conditions.length > 1 
+      ? { $and: conditions } 
+      : conditions[0];
 
     const page = params.page || 1;
     const limit = params.limit || 10;
