@@ -9,6 +9,8 @@ import meRoutes from './api/me/me.routes.js';
 import workspaceRoutes from './api/workspace/workspace.routes.js';
 import groupRoutes from './api/groups/groups.routes.js'; 
 import dashboardRoutes from './api/dashboard/dashboard.routes.js';
+import { requireRole } from './middleware/role.middleware.js';
+import { authMiddleware } from './middleware/auth.middleware.js';
 
 const app = new OpenAPIHono();
 
@@ -30,6 +32,13 @@ app.use('*', cors({
 app.get('/', (c) => {
   return c.text(welcomeStrings.join('\n\n'))
 });
+
+app.use('/api/v1/users/*', authMiddleware, requireRole('admin'));
+app.use('/api/v1/workspaces/*', authMiddleware, requireRole('admin'));
+app.use('/api/v1/attendances/*', authMiddleware, requireRole('admin', 'user'));
+app.use('/api/v1/groups/*', authMiddleware, requireRole('admin', 'user'));
+app.use('/api/v1/dashboard/*', authMiddleware, requireRole('admin', 'user'));
+
 
 app.route('/api/v1/auth', authRoutes);
 app.route('/api/v1/me', meRoutes);
