@@ -38,6 +38,18 @@ export const EmailLoginResponseSchema = z.object({
   payload: TokenPayloadSchema.openapi('Payload'),
 }).openapi('EmailLoginResponse');
 
+export const PostRequestAccountSchema = UserSchema.pick({
+  id: true,
+  rfid: true,
+  firstname: true,
+  lastname: true,
+  email: true,
+  department: true,
+  username: true,
+  password: true,
+}).openapi('PostRequestAccount');
+
 export type TokenPayload = z.infer<typeof TokenPayloadSchema>;
 export type EmailLogin = z.infer<typeof EmailLoginSchema>;
 export type EmailLoginResponse = z.infer<typeof EmailLoginResponseSchema>;
+export type PostRequestAccount = z.infer<typeof PostRequestAccountSchema>;
