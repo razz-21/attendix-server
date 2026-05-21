@@ -64,7 +64,12 @@ export const AttendanceSchema = z.object({
     .openapi({
       description: 'Number of minutes after start_time before a student is considered late',
     }),
-    configurations: AttendanceConfigurationsSchema.optional().openapi({
+    configurations: AttendanceConfigurationsSchema.default({
+      present_point: 1,
+      late_point: 0.5,
+      absent_point: 0,
+      excused_point: 0.75,
+    }).openapi({
     description: 'Attendance point configurations',
   }),
   status: AttendanceStatusSchema,

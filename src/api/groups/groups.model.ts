@@ -31,10 +31,16 @@ export const GroupSchema = z.object({
   ),
 }).openapi('Group');
 
-export const GetGroupSchema = GroupSchema.openapi('GetGroup');
-export const PostGroupSchema = GroupSchema.extend({
-  share_to_workspace: z.boolean().optional(),
-}).openapi('PostGroup');
+export const GetGroupSchema = GroupSchema.extend({
+  creator: z.object({
+    id: z.string().uuid(),
+    firstname: z.string(),
+    lastname: z.string(),
+    avatar: z.string().optional().nullable(),
+  }).optional(),
+}).openapi('GetGroup');
+
+export const PostGroupSchema = GroupSchema.openapi('PostGroup');
 export const PatchGroupSchema = GroupSchema.partial().openapi('PatchGroup');
 export const DeleteGroupSchema = GroupSchema.pick({ id: true }).openapi('DeleteGroup');
 
