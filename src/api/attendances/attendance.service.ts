@@ -14,20 +14,26 @@ export async function getAttendanceById(id: string): Promise<GetAttendance | nul
   }
 }
 
-export async function getAttendances(params: GetAttendancesQuery): Promise<GetAttendance[]> {
+export async function getAttendances(params: GetAttendancesQuery, user: { id: string; workspace_id?: string | null }): Promise<GetAttendance[]> {
   try {
     const db = getDb();
     const collection = db.collection<GetAttendance>(COLLECTIONS.ATTENDANCES);
     const searchQuery = params.q?.trim();
     const statusQuery = params.status;
 
-    const filter: Filter<GetAttendance> = {};
+    const filter: Filter<GetAttendance> = {
+      $and: [
+        { created_by: user.id }
+      ]
+    };
 
     if (searchQuery) {
-      filter.$or = [
-        { name: { $regex: searchQuery, $options: 'i' } },
-        { code: { $regex: searchQuery, $options: 'i' } },
-      ];
+      filter.$and!.push({
+        $or: [
+          { name: { $regex: searchQuery, $options: 'i' } },
+          { code: { $regex: searchQuery, $options: 'i' } },
+        ],
+      });
     }
 
     if (statusQuery) {

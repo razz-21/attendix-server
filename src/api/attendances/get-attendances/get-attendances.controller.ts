@@ -2,11 +2,16 @@ import { Context } from "hono";
 import { getAttendances as getAttendancesService } from "../attendance.service.js";
 import { GetAttendancesQuerySchema } from "../attendance.model.js";
 import { ZodError } from "zod";
+import { User } from "../../users/users.model.js";
 
 export async function getAttendances(c: Context) {
   try {
+    const user = c.get('user') as User;
+    if (!user || !user.id) {
+      return c.json({ error: 'Unauthorized: missing user context' }, 401);
+    }
     const params = GetAttendancesQuerySchema.parse(c.req.query());
-    const attendances = await getAttendancesService(params);
+    const attendances = await getAttendancesService(params, user);
     return c.json(attendances, 200);
   } catch (error) {
     if (error instanceof ZodError) {

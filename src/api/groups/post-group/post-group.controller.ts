@@ -11,7 +11,12 @@ export async function postGroup(c: Context) {
       return c.json({ error: 'Unauthorized: missing user context' }, 401);
     }
     const payload = PostGroupSchema.parse(await c.req.json<PostGroup>());
-  
+
+    // Guard: if the group targets a workspace, it must match the user's own workspace
+    if (payload.workspace_id && payload.workspace_id !== user.workspace_id) {
+      return c.json({ error: 'Forbidden: cannot assign group to a workspace you do not belong to' }, 403);
+    }
+
     const group = await createGroup(payload);
     return c.json(group, 200);
   } catch (error) {
