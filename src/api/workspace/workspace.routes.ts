@@ -14,6 +14,8 @@ import { GetWorkspaceUsersRoute } from "./get-workspace-users/get-workspace-user
 import { getWorkspaceUsersController } from "./get-workspace-users/get-workspace-users.controller.js";
 import { PostWorkspaceUsersRoute } from "./post-workspace-users/post-workspace-users.route.js";
 import { postWorkspaceUsersController } from "./post-workspace-users/post-workspace-users.controller.js";
+import { SelectWorkspaceRoute } from "./select-workspace/select-workspace.route.js";
+import { selectWorkspaceController } from "./select-workspace/select-workspace.controller.js";
 
 const workspaceRoutes = new OpenAPIHono();
 
@@ -23,6 +25,7 @@ workspaceRoutes.openapi(GetWorkspacesRoute, getWorkspaces);
 workspaceRoutes.openapi(GetWorkspaceRoute, getWorkspace);
 workspaceRoutes.openapi(PostWorkspaceRoute, postWorkspace);
 workspaceRoutes.openapi(DeleteWorkspaceRoute, deleteWorkspace);
+workspaceRoutes.openapi(SelectWorkspaceRoute, selectWorkspaceController);
 workspaceRoutes.openapi(PatchWorkspaceRoute, patchWorkspace);
 workspaceRoutes.openapi(GetWorkspaceUsersRoute, getWorkspaceUsersController);
 workspaceRoutes.openapi(PostWorkspaceUsersRoute, postWorkspaceUsersController);

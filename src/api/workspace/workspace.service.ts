@@ -165,3 +165,17 @@ export async function addWorkspaceUsers(id: string, users: GetUser[]): Promise<U
     throw new Error('Failed to add workspace users');
   }
 }
+
+export async function selectWorkspace(userId: string, workspaceId: string): Promise<void> {
+  try {
+    const db = getDb();
+    const result = await db.collection(COLLECTIONS.USERS).updateOne(
+      { id: userId },
+      { $set: { workspace_id: workspaceId, updated_at: new Date().toISOString() } }
+    );
+    console.log('selectWorkspace result:', result);
+  } catch (error) {
+    console.error('selectWorkspace error:', error);
+    throw new Error('Failed to select workspace');
+  }
+}
