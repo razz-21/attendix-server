@@ -4,7 +4,7 @@ import { ZodError } from "zod";
 import { getUserByEmailOrUsername, isUserPasswordValid, signAccessToken, signRefreshToken } from "./auth.service.js";
 import { getExpirationTimestamp } from "../../functions/get-expiration-timestamp.js";
 import { deleteCookie, setCookie } from "hono/cookie";
-import { AUTH_COOKIES } from "../../constants/auth.constant.js";
+import { AUTH_COOKIES, getAuthCookieOptions } from "../../constants/auth.constant.js";
 
 export async function emailLogin(c: Context) {
   try {
@@ -42,24 +42,9 @@ export async function emailLogin(c: Context) {
 
     const accessToken = await signAccessToken(accessPayload);
     const refreshToken = await signRefreshToken(refreshPayload);
-    const isProduction = process.env.NODE_ENV === "production";
-    const cookieSameSite = isProduction ? "None" : "Lax";
 
-    setCookie(c, AUTH_COOKIES.ACCESS_TOKEN, accessToken, {
-      httpOnly: true,
-      secure: isProduction,
-      sameSite: cookieSameSite,
-      maxAge: accessTokenExpiresInMinutes * 60,
-      path: "/",
-    });
-
-    setCookie(c, AUTH_COOKIES.REFRESH_TOKEN, refreshToken, {
-      httpOnly: true,
-      secure: isProduction,
-      sameSite: cookieSameSite,
-      maxAge: refreshTokenExpiresInMinutes * 60,
-      path: "/",
-    });
+    setCookie(c, AUTH_COOKIES.ACCESS_TOKEN, accessToken, getAuthCookieOptions(accessTokenExpiresInMinutes * 60));
+    setCookie(c, AUTH_COOKIES.REFRESH_TOKEN, refreshToken, getAuthCookieOptions(refreshTokenExpiresInMinutes * 60));
 
     const loginResponse: EmailLoginResponse = {
       access_token: accessToken,
@@ -79,8 +64,9 @@ export async function emailLogin(c: Context) {
 
 export async function emailLogout(c: Context) {
   try {
-    deleteCookie(c, AUTH_COOKIES.ACCESS_TOKEN);
-    deleteCookie(c, AUTH_COOKIES.REFRESH_TOKEN);
+    const cookieOpts = getAuthCookieOptions();
+    deleteCookie(c, AUTH_COOKIES.ACCESS_TOKEN, cookieOpts);
+    deleteCookie(c, AUTH_COOKIES.REFRESH_TOKEN, cookieOpts);
     return c.json({ message: 'Successfully logged out' }, 200);
   } catch (error) {
     return c.json({ error: 'Failed to logout' }, 500);

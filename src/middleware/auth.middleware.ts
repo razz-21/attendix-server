@@ -2,7 +2,7 @@ import { getExpirationTimestamp } from "../functions/get-expiration-timestamp.js
 import { getCookie, setCookie } from "hono/cookie";
 import { sign, verify } from "hono/jwt";
 import type { Context, Next } from "hono";
-import { AUTH_COOKIES } from "../constants/auth.constant.js";
+import { AUTH_COOKIES, getAuthCookieOptions } from "../constants/auth.constant.js";
 import { TokenPayload } from "../api/auth/auth.model.js";
 
 export async function authMiddleware(c: Context, next: Next) {
@@ -77,16 +77,8 @@ async function fallbackWithRefreshToken(c: Context, next: Next, refreshToken: st
   };
 
   const newAccessToken = await sign(newAccessPayload, accessTokenSecret, "HS256");
-  const isProduction = process.env.NODE_ENV === "production";
-  const cookieSameSite = isProduction ? "None" : "Lax";
 
-  setCookie(c, AUTH_COOKIES.ACCESS_TOKEN, newAccessToken, {
-    httpOnly: true,
-    secure: isProduction,
-    sameSite: cookieSameSite,
-    maxAge: accessTokenExpiresInMinutes * 60,
-    path: "/",
-  });
+  setCookie(c, AUTH_COOKIES.ACCESS_TOKEN, newAccessToken, getAuthCookieOptions(accessTokenExpiresInMinutes * 60));
 
   c.set("user", refreshPayload.user);
   await next();
