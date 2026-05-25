@@ -70,6 +70,14 @@ export async function getGroups(params: GetPaginatedGroupParams, user: any): Pro
         }
       },
       {
+        $lookup: {
+          from: COLLECTIONS.GROUP_MEMBERS,
+          localField: 'id',
+          foreignField: 'group_id',
+          as: 'members'
+        }
+      },
+      {
         $addFields: {
           creator: {
             $cond: {
@@ -82,7 +90,13 @@ export async function getGroups(params: GetPaginatedGroupParams, user: any): Pro
               },
               else: '$$REMOVE'
             }
-          }
+          },
+          member_count: { $size: '$members' }
+        }
+      },
+      {
+        $project: {
+          members: 0
         }
       }
     ]).toArray();

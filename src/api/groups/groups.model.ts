@@ -38,6 +38,9 @@ export const GetGroupSchema = GroupSchema.extend({
     lastname: z.string(),
     avatar: z.string().optional().nullable(),
   }).optional(),
+  member_count: z.number().optional().openapi({
+    description: 'The number of members in the group',
+  }),
 }).openapi('GetGroup');
 
 export const PostGroupSchema = GroupSchema.openapi('PostGroup');
