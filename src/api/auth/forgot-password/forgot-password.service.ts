@@ -42,7 +42,7 @@ export async function createForgotPasswordRecord(email: string): Promise<boolean
   const forgotPasswordCollection = db.collection<ForgotPassword>(COLLECTIONS.FORGOT_PASSWORD);
   await forgotPasswordCollection.insertOne(record);
 
-  await sendResetPasswordEmail(email, token);
+  await sendResetPasswordEmail(email, token, user.firstname);
 
   return true;
 }

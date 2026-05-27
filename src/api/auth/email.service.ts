@@ -1,5 +1,10 @@
 import nodemailer from 'nodemailer';
 import { config } from 'dotenv';
+import { GetUser } from '../users/users.model.js';
+import {
+  buildApprovalEmailHtml,
+  buildResetPasswordEmailHtml,
+} from './email-templates.js';
 
 config();
 
@@ -11,20 +16,18 @@ const transporter = nodemailer.createTransport({
   },
 });
 
-export const sendResetPasswordEmail = async (to: string, resetToken: string) => {
+export const sendResetPasswordEmail = async (
+  to: string,
+  resetToken: string,
+  firstName?: string
+) => {
   const resetLink = `${process.env.CORS_ORIGIN}/reset-password?token=${resetToken}`;
 
   const mailOptions = {
     from: `"Attendix" <${process.env.SMTP_USERNAME}>`,
     to,
     subject: 'Password Reset Request',
-    html: `
-      <h2>Password Reset Request</h2>
-      <p>We received a request to reset your password. Click the link below to set a new password:</p>
-      <a href="${resetLink}" target="_blank">Reset Password</a>
-      <p>If you didn't request this, you can safely ignore this email.</p>
-      <p>This link will expire in 15 minutes.</p>
-    `,
+    html: buildResetPasswordEmailHtml(resetLink, firstName),
   };
 
   try {
@@ -36,3 +39,23 @@ export const sendResetPasswordEmail = async (to: string, resetToken: string) => 
     throw new Error('Failed to send password reset email');
   }
 };
+
+export const sendApprovalEmail = async (to: string, user: GetUser) => {
+  const loginLink = `${process.env.CORS_ORIGIN}/login`;
+
+  const mailOptions = {
+    from: `"Attendix" <${process.env.SMTP_USERNAME}>`,
+    to,
+    subject: 'Account Approval',
+    html: buildApprovalEmailHtml(loginLink, user.firstname, user.lastname),
+  };
+
+  try {
+    const info = await transporter.sendMail(mailOptions);
+    console.log('Approval email sent: %s', info.messageId);
+    return info;
+  } catch (error) {
+    console.error('Error sending approval email:', error);
+    throw new Error('Failed to send approval email');
+  }
+}

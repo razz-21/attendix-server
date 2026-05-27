@@ -3,6 +3,7 @@ import { PatchUser, PatchUserSchema } from "../users.model.js";
 import { isUserEmailExists, isUsernameExists, updateUser } from "../users.services.js";
 import { getWorkspaceById } from "../../workspace/workspace.service.js";
 import { ZodError } from "zod";
+import { sendApprovalEmail } from "src/api/auth/email.service.js";
 
 export async function patchUser(c: Context) {
   try {
@@ -33,6 +34,10 @@ export async function patchUser(c: Context) {
       updated_at: new Date().toISOString(),
     };
     const result = await updateUser(id, body);
+    
+    if (result && result.status === 'active') {
+      await sendApprovalEmail(result.email, result);
+    }
     return c.json(result);
   } catch (error) {
     if (error instanceof ZodError) {
