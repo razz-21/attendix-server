@@ -35,6 +35,7 @@ export const GroupMemberSchema = z.object({
 
 export const GetGroupMemberSchema = GroupMemberSchema.openapi('GetGroupMember');
 export const PostGroupMemberSchema = GroupMemberSchema.omit({ id: true, created_at: true, updated_at: true }).openapi('PostGroupMember');
+export const ImportGroupMemberSchema = GroupMemberSchema.array().openapi('ImportGroupMember');
 export const PatchGroupMemberSchema = GroupMemberSchema.partial().openapi('PatchGroupMember');
 
 export const GetPaginatedGroupMemberParamsSchema = z.object({
@@ -53,6 +54,7 @@ export const GetPaginatedGroupMembersSchema = z.object({
 
 export type GetGroupMember = z.infer<typeof GetGroupMemberSchema>;
 export type PostGroupMember = z.infer<typeof PostGroupMemberSchema>;
+export type ImportGroupMember = z.infer<typeof ImportGroupMemberSchema>;
 export type PatchGroupMember = z.infer<typeof PatchGroupMemberSchema>;
 export type GetPaginatedGroupMemberParams = z.infer<typeof GetPaginatedGroupMemberParamsSchema>;
 export type GetPaginatedGroupMembers = z.infer<typeof GetPaginatedGroupMembersSchema>;

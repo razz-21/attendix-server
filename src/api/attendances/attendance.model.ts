@@ -73,6 +73,9 @@ export const AttendanceSchema = z.object({
     description: 'Attendance point configurations',
   }),
   status: AttendanceStatusSchema,
+  shared_with: z.array(z.uuidv4()).default([]).openapi({
+    description: 'UUIDs of the users who have access to this attendance record',
+  }),
   created_by: z.uuidv4().openapi({
     description: 'UUID of the user who created this attendance record',
   }),

@@ -57,6 +57,17 @@ export async function getGroups(params: GetPaginatedGroupParams, user: any): Pro
       { $limit: limit },
       {
         $lookup: {
+          from: COLLECTIONS.GROUP_MEMBERS,
+          let: { groupId: '$id' },
+          pipeline: [
+            { $match: { $expr: { $eq: ['$group_id', '$$groupId'] } } },
+            { $count: 'count' },
+          ],
+          as: 'member_stats',
+        },
+      },
+      {
+        $lookup: {
           from: COLLECTIONS.USERS,
           localField: 'created_by',
           foreignField: 'id',
@@ -71,6 +82,9 @@ export async function getGroups(params: GetPaginatedGroupParams, user: any): Pro
       },
       {
         $addFields: {
+          count_members: {
+            $ifNull: [{ $arrayElemAt: ['$member_stats.count', 0] }, 0],
+          },
           creator: {
             $cond: {
               if: { $ifNull: ['$creator', false] },
@@ -84,7 +98,8 @@ export async function getGroups(params: GetPaginatedGroupParams, user: any): Pro
             }
           }
         }
-      }
+      },
+      { $unset: 'member_stats' },
     ]).toArray();
 
     const total = await groupsCollection.countDocuments(filter);

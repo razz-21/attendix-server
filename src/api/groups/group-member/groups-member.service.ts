@@ -83,13 +83,15 @@ export async function deleteGroupMemberById(group_id: string, id: string): Promi
   }
 }
 
-export async function importGroupMembers(members: PostGroupMember[]): Promise<number> {
+export async function importGroupMembers(members: PostGroupMember[]): Promise<GetGroupMember[]> {
   try {
     const db = getDb();
     const collection = db.collection<PostGroupMember>(COLLECTIONS.GROUP_MEMBERS);
     const result = await collection.insertMany(members);
     if (!result.acknowledged) throw new Error('Failed to import group members');
-    return result.insertedCount;
+
+    const insertedMembers = await collection.find({ _id: { $in: Object.values(result.insertedIds) } }).toArray();
+    return insertedMembers as unknown as GetGroupMember[];
   } catch (error) {
     throw new Error('Failed to import group members');
   }

@@ -19,6 +19,9 @@ export const GroupSchema = z.object({
   created_by: z.uuidv4().openapi({
     description: 'The unique identifier for the user who created the group',
   }),
+  count_members: z.number().default(0).openapi({
+    description: 'The number of members in the group',
+  }),
   created_at: z.iso.datetime().default(new Date().toISOString())
     .openapi({
       description: 'The date and time the group was created',
