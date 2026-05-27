@@ -1,5 +1,5 @@
 import { Context } from "hono";
-import { getAttendances as getAttendancesService } from "../attendance.service.js";
+import { enrichAttendancesWithUsers, getAttendances as getAttendancesService } from "../attendance.service.js";
 import { GetAttendancesQuerySchema } from "../attendance.model.js";
 import { ZodError } from "zod";
 import { User } from "../../users/users.model.js";
@@ -12,7 +12,8 @@ export async function getAttendances(c: Context) {
     }
     const params = GetAttendancesQuerySchema.parse(c.req.query());
     const attendances = await getAttendancesService(params, user);
-    return c.json(attendances, 200);
+    const enrichedAttendances = await enrichAttendancesWithUsers(attendances, user);
+    return c.json(enrichedAttendances, 200);
   } catch (error) {
     if (error instanceof ZodError) {
       return c.json({ error: 'Validation failed', details: error.issues }, 400);

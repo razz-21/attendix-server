@@ -1,4 +1,5 @@
 import { z } from "@hono/zod-openapi";
+import { GetUserSchema } from "../users/users.model.js";
 
 export const AttendanceScheduleDaysSchema = z.array(z.enum(['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'])).openapi({
   description: 'Days of the week when attendance is tracked',
@@ -91,7 +92,12 @@ export const AttendanceSchema = z.object({
   ),
 }).openapi('Attendance');
 
-export const GetAttendanceSchema = AttendanceSchema.openapi('GetAttendance');
+const AttendanceUserSchema = GetUserSchema.pick({ id: true, firstname: true, lastname: true });
+
+export const GetAttendanceSchema = AttendanceSchema.extend({
+  created_by: AttendanceUserSchema,
+  shared_with_users: z.array(AttendanceUserSchema).default([]),
+}).openapi('GetAttendance');
 export const PostAttendanceSchema = AttendanceSchema.openapi('PostAttendance');
 export const PatchAttendanceSchema = AttendanceSchema
   .omit({ id: true, created_at: true })

@@ -1,5 +1,7 @@
 import { COLLECTIONS } from "../../constants/collectionts.constant.js";
 import { getDb } from "../../config/db.config.js";
+import { Attendance } from "../attendances/attendance.model.js";
+import { buildAttendanceAccessFilter } from "../attendances/attendance.service.js";
 
 export async function getDashboardData(user: { id: string; workspace_id?: string | null }): Promise<{ suggested_groups: any[]; recent_attendances: any[] }> {
   try {
@@ -19,12 +21,12 @@ export async function getDashboardData(user: { id: string; workspace_id?: string
       .limit(6)
       .toArray();
 
-    const attendances = await db.collection(COLLECTIONS.ATTENDANCES)
+    const attendances = await db.collection<Attendance>(COLLECTIONS.ATTENDANCES)
       .find({
         $and: [
           { status: 'active' },
-          { created_by: user.id }
-        ]
+          buildAttendanceAccessFilter(user),
+        ],
       })
       .sort({ updated_at: -1 })
       .limit(8)
@@ -39,15 +41,24 @@ export async function getDashboardData(user: { id: string; workspace_id?: string
   }
 }
 
-export async function searchAttendances(q: string): Promise<any[]> {
+export async function searchAttendances(
+  q: string,
+  user: { id: string; workspace_id?: string | null },
+): Promise<any[]> {
   try {
     const db = getDb();
-    const attendances = await db.collection(COLLECTIONS.ATTENDANCES)
+    const searchQuery = q.trim();
+    const attendances = await db.collection<Attendance>(COLLECTIONS.ATTENDANCES)
       .find({
-        $or: [
-          { name: { $regex: q, $options: 'i' } },
-          { code: { $regex: q, $options: 'i' } },
-        ]
+        $and: [
+          buildAttendanceAccessFilter(user),
+          {
+            $or: [
+              { name: { $regex: searchQuery, $options: 'i' } },
+              { code: { $regex: searchQuery, $options: 'i' } },
+            ],
+          },
+        ],
       })
       .sort({ updated_at: -1 })
       .toArray();

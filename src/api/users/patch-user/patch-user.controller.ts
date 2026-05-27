@@ -35,7 +35,7 @@ export async function patchUser(c: Context) {
     };
     const result = await updateUser(id, body);
     
-    if (result && result.status === 'active') {
+    if (result && payload.status === 'active') {
       await sendApprovalEmail(result.email, result);
     }
     return c.json(result);

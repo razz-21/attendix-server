@@ -1,6 +1,6 @@
 import { Context } from "hono";
 import { PatchAttendance, PatchAttendanceSchema } from "../attendance.model.js";
-import { updateAttendanceById, getAttendanceById } from "../attendance.service.js";
+import { enrichAttendancesWithUsers, updateAttendanceById, getAttendanceById, validateSharedWithUsersInWorkspace } from "../attendance.service.js";
 import { ZodError } from "zod";
 import { User } from "../../users/users.model.js";
 
@@ -27,9 +27,18 @@ export async function patchAttendance(c: Context) {
     }
 
     const payload = PatchAttendanceSchema.parse(await c.req.json<PatchAttendance>());
+
+    if (typeof payload.shared_with !== "undefined") {
+      const isValid = await validateSharedWithUsersInWorkspace(payload.shared_with ?? [], user.workspace_id);
+      if (!isValid) {
+        return c.json({ error: "Invalid shared_with users" }, 400);
+      }
+    }
+
     const attendance = await updateAttendanceById(id, payload);
 
-    return c.json(attendance, 200);
+    const enriched = await enrichAttendancesWithUsers([attendance], user);
+    return c.json(enriched[0], 200);
   } catch (error) {
     if (error instanceof ZodError) {
       return c.json({ error: 'Validation failed', details: error.issues }, 400);
