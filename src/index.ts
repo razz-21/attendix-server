@@ -11,6 +11,7 @@ import groupRoutes from './api/groups/groups.routes.js';
 import dashboardRoutes from './api/dashboard/dashboard.routes.js';
 import { requireRole } from './middleware/role.middleware.js';
 import { authMiddleware } from './middleware/auth.middleware.js';
+import { authRateLimiter } from './constants/auth.constant.js';
 
 const app = new OpenAPIHono();
 
@@ -33,6 +34,7 @@ app.get('/', (c) => {
   return c.text(welcomeStrings.join('\n\n'))
 });
 
+app.use('/api/v1/auth/*', authRateLimiter);
 app.use('/api/v1/users/*', authMiddleware, requireRole('admin'));
 app.use('/api/v1/workspaces/select', authMiddleware, requireRole('admin', 'user'));
 app.use('/api/v1/workspaces/*', authMiddleware, requireRole('admin', 'user'));
