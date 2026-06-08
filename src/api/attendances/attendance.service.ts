@@ -3,6 +3,8 @@ import { getDb } from "../../config/db.config.js";
 import { Attendance, GetAttendance, GetAttendancesQuery, PatchAttendance, PostAttendance } from "./attendance.model.js";
 import { Filter } from "mongodb";
 import { User } from "../users/users.model.js";
+import { AttendanceRecord } from "./attendance-record/attendance-record.model.js";
+import { GetAttendee } from "./attendees/attendees.model.js";
 
 export function buildAttendanceAccessFilter(user: { id: string }): Filter<Attendance> {
   return {
@@ -185,4 +187,37 @@ export async function validateSharedWithUsersInWorkspace(
 
   const validIds = new Set(users.map((u) => u.id));
   return sharedWithIds.every((id) => validIds.has(id));
+}
+
+export async function bulkDeleteAttendance(attendances_id: string): Promise<boolean> {
+  try {
+    const db = getDb();
+    const collection = db.collection<Attendance>(COLLECTIONS.ATTENDANCE);
+    const result = await collection.deleteMany({ attendances_id });
+    return result.deletedCount > 0;
+  } catch (error) {
+    throw new Error('Failed to delete attendance');
+  }
+}
+
+export async function bulkDeleteAttendanceRecord(attendances_id: string): Promise<boolean> {
+  try {
+    const db = getDb();
+    const collection = db.collection<AttendanceRecord>(COLLECTIONS.ATTENDANCE_RECORDS);
+    const result = await collection.deleteMany({attendances_id });
+    return result.deletedCount > 0;
+  } catch (error) {
+    throw new Error('Failed to delete attendance record');
+  }
+}
+
+export async function bulkDeleteAttendanceAttendee(attendances_id: string): Promise<boolean> {
+  try {
+    const db = getDb();
+    const collection = db.collection<GetAttendee>(COLLECTIONS.ATTENDANCE_ATTENDEES);
+    const result = await collection.deleteMany({ attendances_id });
+    return result.deletedCount > 0;
+  } catch (error) {
+    throw new Error('Failed to delete attendance attendee');
+  }
 }

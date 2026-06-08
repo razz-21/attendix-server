@@ -21,8 +21,12 @@ export const AttendanceSchema = z.object({
     description: 'End time of the session',
     example: '10:00 AM',
   }),
-  attendance_id: z.string().uuid().openapi({
+  attendance_id: z.uuidv4().openapi({
     description: 'The attendance ID this record belongs to',
+    example: '123e4567-e89b-12d3-a456-426614174000',
+  }),
+  attendances_id: z.uuidv4().openapi({
+    description: 'The attendances ID this record belongs to',
     example: '123e4567-e89b-12d3-a456-426614174000',
   }),
   created_at: z.string().datetime().default(() => new Date().toISOString()).openapi({

@@ -1,5 +1,5 @@
 import { Context } from "hono";
-import { deleteAttendanceById, getAttendanceById } from "../attendance.service.js";
+import { bulkDeleteAttendance, bulkDeleteAttendanceAttendee, bulkDeleteAttendanceRecord, deleteAttendanceById, getAttendanceById } from "../attendance.service.js";
 import { User } from "../../users/users.model.js";
 
 export async function deleteAttendance(c: Context) {
@@ -25,6 +25,13 @@ export async function deleteAttendance(c: Context) {
     }
 
     const result = await deleteAttendanceById(id);
+
+    if (result) {
+      await bulkDeleteAttendance(id);
+      await bulkDeleteAttendanceAttendee(id);
+      await bulkDeleteAttendanceRecord(id);
+    }
+    
     return c.json(result);
   } catch (error) {
     const errorMessage = error instanceof Error ? error.message : 'Failed to delete attendance';

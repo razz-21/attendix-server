@@ -2,6 +2,7 @@ import { COLLECTIONS } from "../../../constants/collectionts.constant.js";
 import { getDb } from "../../../config/db.config.js";
 import { GetAttendance, GetAttendancesQuery, PatchAttendance, PostAttendance } from "./attendance.model.js";
 import { Filter } from "mongodb";
+import { AttendanceRecord } from "../attendance-record/attendance-record.model.js";
 
 export async function getAttendance(attendance_id: string, params: GetAttendancesQuery): Promise<GetAttendance[]> {
   try {
@@ -76,5 +77,16 @@ export async function deleteAttendanceById(attendance_id: string, id: string): P
     return result.deletedCount > 0;
   } catch (error) {
     throw new Error('Failed to delete attendance record');
+  }
+}
+
+export async function bulkDeleteAttendanceRecordsByAttendanceId(attendance_id: string): Promise<boolean> {
+  try {
+    const db = getDb();
+    const collection = db.collection<AttendanceRecord>(COLLECTIONS.ATTENDANCE_RECORDS);
+    const result = await collection.deleteMany({ attendance_id });
+    return result.deletedCount > 0;
+  } catch (error) {
+    throw new Error('Failed to delete attendance');
   }
 }

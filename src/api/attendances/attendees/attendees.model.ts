@@ -42,6 +42,10 @@ export const AttendeeSchema = z.object({
   attendance_id: z.uuidv4().openapi({
     description: 'Foreign key reference to the attendance record',
   }),
+  attendances_id: z.uuidv4().openapi({
+    description: 'The attendances ID this attendee belongs to',
+    example: '123e4567-e89b-12d3-a456-426614174000',
+  }),
   created_at: z.date().default(() => new Date()).openapi({
     description: 'Timestamp when the attendee was created',
   }),
