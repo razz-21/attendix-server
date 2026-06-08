@@ -195,6 +195,7 @@ export async function importGroupAttendees(attendanceId: string, groupId: string
       newAttendees.push({
         id: crypto.randomUUID(),
         attendance_id: attendanceId,
+        attendances_id: attendanceId,
         rfid: member.rfid,
         name: member.name,
         department: member.department,
