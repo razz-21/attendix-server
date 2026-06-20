@@ -19,7 +19,7 @@ export async function getAttendeesController(c: Context) {
       year_level: c.req.query('year_level') ?? '',
       section: c.req.query('section') ?? '',
       page: pageParam ? parseInt(pageParam, 10) : 1,
-      limit: limitParam ? parseInt(limitParam, 10) : 10,
+      limit: limitParam ? parseInt(limitParam, 10) : 1_000,
     });
     
     const result = await getAttendees(attendancesId, query);
