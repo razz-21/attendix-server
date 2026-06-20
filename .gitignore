@@ -27,3 +27,10 @@ lerna-debug.log*
 # misc
 .DS_Store
 .vercel
+
+# dist
+dist/
+
+# lock files
+package-lock.json
+bun.lock

@@ -1,28 +1,39 @@
-Prerequisites:
+# Attendix Server
 
-- [Vercel CLI](https://vercel.com/docs/cli) installed globally
+## Prerequisites
 
-To develop locally:
+- Node.js installed
+- npm installed
 
-```
+Install dependencies:
+
+```bash
 npm install
-vc dev
 ```
 
-```
-open http://localhost:3000
+## Run the app
+
+For local development without Vercel authentication:
+
+```bash
+npm run dev
 ```
 
-To build locally:
+For Vercel-authenticated users who want Vercel local emulation:
 
-```
-npm install
-vc build
+```bash
+vercel dev
 ```
 
-To deploy:
+Open:
 
+```bash
+http://localhost:3000
 ```
-npm install
-vc deploy
+
+## Build and deploy with Vercel
+
+```bash
+vercel build
+vercel deploy
 ```

@@ -1,0 +1,35 @@
+import { EmailLoginResponseSchema, EmailLoginSchema } from "../auth.model.js";
+import { createRoute } from "@hono/zod-openapi";
+
+export const EmailLoginRoute = createRoute({
+  path: '/email-login',
+  method: 'post',
+  request: {
+    body: {
+      content: {
+        'application/json': {
+          schema: EmailLoginSchema,
+        },
+      },
+    },
+  },
+  responses: {
+    200: {
+      content: {
+        'application/json': {
+          schema: EmailLoginResponseSchema,
+        },
+      },
+      description: 'Successfully logged in',
+    },
+    400: {
+      description: 'Bad request',
+    },
+    401: {
+      description: 'Unauthorized: Invalid credentials',
+    },
+    500: {
+      description: 'Internal server error',
+    },
+  },
+});
