@@ -29,6 +29,10 @@ export const AttendanceSchema = z.object({
     description: 'The attendances ID this record belongs to',
     example: '123e4567-e89b-12d3-a456-426614174000',
   }),
+  status: z.enum(['active', 'inactive']).default('active').openapi({
+    description: 'The status of the attendance record',
+    example: 'active',
+  }),
   created_at: z.string().datetime().default(() => new Date().toISOString()).openapi({
     description: 'The date and time the record was created',
     example: '2021-01-01T00:00:00.000Z',

@@ -18,6 +18,14 @@ export const postAttendanceRecordController = async (c: Context) => {
     if (error instanceof ZodError) {
       return c.json({ error: 'Validation failed', details: error.issues }, 400);
     }
+    if (error instanceof Error) {
+      if (error.message === 'Attendance not found') {
+        return c.json({ error: error.message }, 404);
+      }
+      if (error.message === 'Attendance is inactive') {
+        return c.json({ error: error.message }, 403);
+      }
+    }
     return c.json({ error: 'Failed to create attendance record' }, 500);
   }
 }

@@ -38,7 +38,6 @@ app.use('/api/v1/auth/*', authRateLimiter);
 app.use('/api/v1/users/*', authMiddleware, requireRole('admin'));
 app.use('/api/v1/workspaces/select', authMiddleware, requireRole('admin', 'user'));
 app.use('/api/v1/workspaces/*', authMiddleware, requireRole('admin', 'user'));
-app.use('/api/v1/attendances/*', authMiddleware, requireRole('admin', 'user'));
 app.use('/api/v1/groups/*', authMiddleware, requireRole('admin', 'user'));
 app.use('/api/v1/dashboard/*', authMiddleware, requireRole('admin', 'user'));
 
