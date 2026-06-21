@@ -13,8 +13,13 @@ import attendeesRoutes from "./attendees/attendees.routes.js";
 import attendanceRoutes from "./attendance/attendance.routes.js";
 import attendanceRecordRoutes from "./attendance-record/attendance-record.routes.js";
 import { authMiddleware } from "../../middleware/auth.middleware.js";
+import { publicPostAttendanceRecordRoute } from "./attendance-record/public-post-attendance-record/public-post-attendance-record.route.js";
+import { publicPostAttendanceRecordController } from "./attendance-record/public-post-attendance-record/public-post-attendance-record.controller.js";
 
 const attendancesRoutes = new OpenAPIHono()
+
+// Public attendance routes (registered before auth middleware)
+attendancesRoutes.openapi(publicPostAttendanceRecordRoute, publicPostAttendanceRecordController);
 
 attendancesRoutes.use("*", authMiddleware);
 
