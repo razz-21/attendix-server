@@ -106,9 +106,33 @@ export async function deleteAttendanceById(id: string): Promise<boolean> {
     const db = getDb();
     const collection = db.collection<Attendance>(COLLECTIONS.ATTENDANCES);
     const result = await collection.deleteOne({ id });
-    return result.acknowledged;
+    return result.deletedCount > 0;
   } catch (error) {
     throw new Error('Failed to delete attendance');
+  }
+}
+
+export async function bulkDeleteAttendancesByIds(ids: string[], userId: string): Promise<number> {
+  try {
+    const db = getDb();
+    const collection = db.collection<Attendance>(COLLECTIONS.ATTENDANCES);
+    const attendances = await collection.find({ id: { $in: ids }, created_by: userId }).toArray();
+    const deletableIds = attendances.map((attendance) => attendance.id);
+
+    if (deletableIds.length === 0) {
+      return 0;
+    }
+
+    for (const id of deletableIds) {
+      await bulkDeleteAttendance(id);
+      await bulkDeleteAttendanceAttendee(id);
+      await bulkDeleteAttendanceRecord(id);
+    }
+
+    const result = await collection.deleteMany({ id: { $in: deletableIds }, created_by: userId });
+    return result.deletedCount;
+  } catch (error) {
+    throw new Error('Failed to delete attendances');
   }
 }
 

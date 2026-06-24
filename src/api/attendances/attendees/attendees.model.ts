@@ -111,3 +111,11 @@ export const ImportGroupResponseSchema = z.object({
 });
 
 export type ImportGroupResponse = z.infer<typeof ImportGroupResponseSchema>;
+
+export const BulkDeleteAttendeesSchema = z.object({
+  ids: z.array(z.uuidv4()).min(1, 'At least one attendee id is required').openapi({
+    description: 'The ids of the attendees to delete',
+  }),
+}).openapi('BulkDeleteAttendees');
+
+export type BulkDeleteAttendees = z.infer<typeof BulkDeleteAttendeesSchema>;

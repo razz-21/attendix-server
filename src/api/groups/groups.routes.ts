@@ -22,6 +22,8 @@ import { PatchGroupMemberRoute } from "./group-member/patch-group-member/patch-g
 import { patchGroupMemberController } from "./group-member/patch-group-member/patch-group-member.controller.js";
 import { ImportGroupMemberRoute } from "./group-member/import-group-member/import-group-member.route.js";
 import { importGroupMemberController } from "./group-member/import-group-member/import-group-member.controller.js";
+import { BulkDeleteGroupMembersRoute } from "./group-member/bulk-delete-group-member/bulk-delete-group-member.route.js";
+import { bulkDeleteGroupMembersController } from "./group-member/bulk-delete-group-member/bulk-delete-group-member.controller.js";
 
 const groupRoutes = new OpenAPIHono();
 
@@ -39,5 +41,6 @@ groupRoutes.openapi(PostGroupMemberRoute, postGroupMemberController);
 groupRoutes.openapi(DeleteGroupMemberRoute, deleteGroupMemberController);
 groupRoutes.openapi(PatchGroupMemberRoute, patchGroupMemberController);
 groupRoutes.openapi(ImportGroupMemberRoute, importGroupMemberController);
+groupRoutes.openapi(BulkDeleteGroupMembersRoute, bulkDeleteGroupMembersController);
 
 export default groupRoutes;

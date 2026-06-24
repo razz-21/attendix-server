@@ -52,9 +52,16 @@ export const GetPaginatedGroupMembersSchema = z.object({
   limit: z.number(),
 }).openapi('GetPaginatedGroupMembers');
 
+export const BulkDeleteGroupMembersSchema = z.object({
+  ids: z.array(z.string().uuid()).min(1, 'At least one member id is required').openapi({
+    description: 'The ids of the group members to delete',
+  }),
+}).openapi('BulkDeleteGroupMembers');
+
 export type GetGroupMember = z.infer<typeof GetGroupMemberSchema>;
 export type PostGroupMember = z.infer<typeof PostGroupMemberSchema>;
 export type ImportGroupMember = z.infer<typeof ImportGroupMemberSchema>;
 export type PatchGroupMember = z.infer<typeof PatchGroupMemberSchema>;
 export type GetPaginatedGroupMemberParams = z.infer<typeof GetPaginatedGroupMemberParamsSchema>;
 export type GetPaginatedGroupMembers = z.infer<typeof GetPaginatedGroupMembersSchema>;
+export type BulkDeleteGroupMembers = z.infer<typeof BulkDeleteGroupMembersSchema>;

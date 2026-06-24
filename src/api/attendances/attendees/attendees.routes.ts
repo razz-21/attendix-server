@@ -11,11 +11,14 @@ import { DeleteAttendeeRoute } from "./delete-attendee/delete-attendee.route.js"
 import { deleteAttendeeController } from "./delete-attendee/delete-attendee.controller.js";
 import { ImportGroupRoute } from "./import-group/import-group.route.js";
 import { importGroupController } from "./import-group/import-group.controller.js";
+import { BulkDeleteAttendeesRoute } from "./bulk-delete-attendees/bulk-delete-attendees.route.js";
+import { bulkDeleteAttendeesController } from "./bulk-delete-attendees/bulk-delete-attendees.controller.js";
 
 const attendeesRoutes = new OpenAPIHono();
 
 attendeesRoutes.openapi(GetAttendeesRoute, getAttendeesController);
 attendeesRoutes.openapi(ImportGroupRoute, importGroupController);
+attendeesRoutes.openapi(BulkDeleteAttendeesRoute, bulkDeleteAttendeesController);
 attendeesRoutes.openapi(GetAttendeeRoute, getAttendeeController);
 attendeesRoutes.openapi(PostAttendeeRoute, postAttendeeController);
 attendeesRoutes.openapi(PatchAttendeeRoute, patchAttendeeController);

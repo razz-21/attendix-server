@@ -158,6 +158,23 @@ export async function deleteAttendee(attendanceId: string, attendeeId: string): 
   }
 }
 
+export async function bulkDeleteAttendeesByIds(attendanceId: string, ids: string[]): Promise<number> {
+  try {
+    const db = getDb();
+    const collection = db.collection<GetAttendee>(COLLECTIONS.ATTENDANCE_ATTENDEES);
+    const result = await collection.deleteMany({
+      id: { $in: ids },
+      $or: [
+        { attendance_id: attendanceId },
+        { attendances_id: attendanceId },
+      ],
+    });
+    return result.deletedCount;
+  } catch (error) {
+    throw new Error('Failed to delete attendees');
+  }
+}
+
 export async function importGroupAttendees(attendanceId: string, groupId: string): Promise<ImportGroupResponse> {
   try {
     const db = getDb();
