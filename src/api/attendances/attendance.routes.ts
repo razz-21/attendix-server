@@ -9,6 +9,8 @@ import { PatchAttendanceRoute } from "./patch-attendance/patch-attendance.route.
 import { patchAttendance } from "./patch-attendance/patch-attendance.controller.js";
 import { DeleteAttendanceRoute } from "./delete-attendance/delete-attendance.route.js";
 import { deleteAttendance } from "./delete-attendance/delete-attendance.controller.js";
+import { BulkDeleteAttendancesRoute } from "./bulk-delete-attendances/bulk-delete-attendances.route.js";
+import { bulkDeleteAttendancesController } from "./bulk-delete-attendances/bulk-delete-attendances.controller.js";
 import attendeesRoutes from "./attendees/attendees.routes.js";
 import attendanceRoutes from "./attendance/attendance.routes.js";
 import attendanceRecordRoutes from "./attendance-record/attendance-record.routes.js";
@@ -28,6 +30,7 @@ attendancesRoutes.openapi(GetAttendanceRoute, getAttendance);
 attendancesRoutes.openapi(PostAttendanceRoute, postAttendance);
 attendancesRoutes.openapi(PatchAttendanceRoute, patchAttendance);
 attendancesRoutes.openapi(DeleteAttendanceRoute, deleteAttendance);
+attendancesRoutes.openapi(BulkDeleteAttendancesRoute, bulkDeleteAttendancesController);
 
 attendancesRoutes.route('/:attendances_id/attendance', attendanceRoutes);
 attendancesRoutes.route('/:attendances_id/attendees', attendeesRoutes);

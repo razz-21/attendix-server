@@ -109,6 +109,12 @@ export const GetAttendancesQuerySchema = z.object({
   status: AttendanceStatusSchema.optional(),
 }).openapi('GetAttendancesQuery');
 
+export const BulkDeleteAttendancesSchema = z.object({
+  ids: z.array(z.uuidv4()).min(1, 'At least one attendance id is required').openapi({
+    description: 'The ids of the attendances to delete',
+  }),
+}).openapi('BulkDeleteAttendances');
+
 // Types
 export type Attendance = z.infer<typeof AttendanceSchema>;
 export type GetAttendance = z.infer<typeof GetAttendanceSchema>;
@@ -116,4 +122,5 @@ export type PostAttendance = z.infer<typeof PostAttendanceSchema>;
 export type PatchAttendance = z.infer<typeof PatchAttendanceSchema>;
 export type DeleteAttendance = z.infer<typeof DeleteAttendanceSchema>;
 export type GetAttendancesQuery = z.infer<typeof GetAttendancesQuerySchema>;
+export type BulkDeleteAttendances = z.infer<typeof BulkDeleteAttendancesSchema>;
 export type AttendanceConfigurations = z.infer<typeof AttendanceConfigurationsSchema>;

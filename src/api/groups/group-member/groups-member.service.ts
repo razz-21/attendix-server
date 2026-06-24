@@ -83,6 +83,17 @@ export async function deleteGroupMemberById(group_id: string, id: string): Promi
   }
 }
 
+export async function bulkDeleteGroupMembersByIds(group_id: string, ids: string[]): Promise<number> {
+  try {
+    const db = getDb();
+    const collection = db.collection<GetGroupMember>(COLLECTIONS.GROUP_MEMBERS);
+    const result = await collection.deleteMany({ group_id, id: { $in: ids } });
+    return result.deletedCount;
+  } catch (error) {
+    throw new Error('Failed to delete group members');
+  }
+}
+
 export async function importGroupMembers(members: PostGroupMember[]): Promise<GetGroupMember[]> {
   try {
     const db = getDb();

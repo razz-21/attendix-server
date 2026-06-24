@@ -44,7 +44,7 @@ export const GetGroupSchema = GroupSchema.extend({
 }).openapi('GetGroup');
 
 export const PostGroupSchema = GroupSchema.openapi('PostGroup');
-export const PatchGroupSchema = GroupSchema.partial().openapi('PatchGroup');
+export const PatchGroupSchema = GroupSchema.omit({ id: true, created_at: true, created_by: true, count_members: true }).partial().openapi('PatchGroup');
 export const DeleteGroupSchema = GroupSchema.pick({ id: true }).openapi('DeleteGroup');
 
 export const GetPaginatedGroupParamsSchema = z.object({
