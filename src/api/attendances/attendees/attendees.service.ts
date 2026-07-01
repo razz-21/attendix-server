@@ -52,7 +52,7 @@ export async function getAttendees(attendanceId: string, params: GetAttendeesQue
 
     // Implement pagination with proper defaults
     const page = Math.max(1, params.page ?? 1);
-    const limit = Math.max(1, Math.min(100, params.limit ?? 10)); // Cap at 100 items max
+    const limit = Math.max(1, params.limit ?? 10);
     const skip = (page - 1) * limit;
 
     const attendees = await collection
