@@ -3,12 +3,17 @@ import { PostRequestAccount, PostRequestAccountSchema } from "../auth.model.js";
 import { Context } from "hono";
 import { createUser } from "../../users/users.services.js";
 import { ZodError } from "zod";
+import { hash } from "bcrypt-ts";
 
 export async function postRequestAccountController(c: Context) {
   try {
     const payload = PostRequestAccountSchema.parse(await c.req.json<PostRequestAccount>());
+    
+    const hashedPassword = await hash(payload.password, 12);
+
     const userPayload: PostUser = {
       ...payload,
+      password: hashedPassword,
       id: crypto.randomUUID(),
       created_at: new Date().toISOString(),
       updated_at: new Date().toISOString(),
