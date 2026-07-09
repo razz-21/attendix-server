@@ -4,6 +4,7 @@ import { isUserEmailExists, isUsernameExists, updateUser } from "../users.servic
 import { getWorkspaceById } from "../../workspace/workspace.service.js";
 import { ZodError } from "zod";
 import { sendApprovalEmail } from "../../auth/email.service.js";
+import { hash } from "bcrypt-ts";
 
 export async function patchUser(c: Context) {
   try {
@@ -29,10 +30,15 @@ export async function patchUser(c: Context) {
       }
     }
 
-    const body = {
+    const body: any = {
       ...payload,
       updated_at: new Date().toISOString(),
     };
+
+    if (payload.password) {
+      body.password = await hash(payload.password, 12);
+    }
+
     const result = await updateUser(id, body);
     
     if (result && payload.status === 'active') {
