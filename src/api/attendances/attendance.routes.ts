@@ -17,6 +17,8 @@ import attendanceRecordRoutes from "./attendance-record/attendance-record.routes
 import { authMiddleware } from "../../middleware/auth.middleware.js";
 import { publicPostAttendanceRecordRoute } from "./attendance-record/public-post-attendance-record/public-post-attendance-record.route.js";
 import { publicPostAttendanceRecordController } from "./attendance-record/public-post-attendance-record/public-post-attendance-record.controller.js";
+import { GetOtcRoute } from "./get-otc/get-otc.route.js";
+import { getOtcController } from "./get-otc/get-otc.controller.js";
 
 const attendancesRoutes = new OpenAPIHono()
 
@@ -31,6 +33,7 @@ attendancesRoutes.openapi(PostAttendanceRoute, postAttendance);
 attendancesRoutes.openapi(PatchAttendanceRoute, patchAttendance);
 attendancesRoutes.openapi(DeleteAttendanceRoute, deleteAttendance);
 attendancesRoutes.openapi(BulkDeleteAttendancesRoute, bulkDeleteAttendancesController);
+attendancesRoutes.openapi(GetOtcRoute, getOtcController);
 
 attendancesRoutes.route('/:attendances_id/attendance', attendanceRoutes);
 attendancesRoutes.route('/:attendances_id/attendees', attendeesRoutes);

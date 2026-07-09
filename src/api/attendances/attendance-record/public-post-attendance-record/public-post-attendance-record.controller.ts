@@ -10,9 +10,13 @@ export const publicPostAttendanceRecordController = async (c: Context) => {
       return c.json({ error: 'Attendances ID is required' }, 400);
     }
 
-    const { rfid, attendance_id } = c.req.query();
+    const { rfid, attendance_id, otc  } = c.req.query();
     if (!rfid) {
       return c.json({ error: 'RFID is required' }, 400);
+    }
+
+    if (!otc) {
+      return c.json({ error: 'OTC is required' }, 400);
     }
 
     if (!attendance_id) {
@@ -22,6 +26,26 @@ export const publicPostAttendanceRecordController = async (c: Context) => {
     const attendee = await getAttendeeByRfid(rfid, attendances_id);
     if (!attendee) {
       return c.json({ error: 'Attendee not found' }, 404);
+    }
+
+    const now = Math.floor(Date.now() / 1000);
+    const window = Math.floor(now / 15);
+
+    const seed = attendance_id
+      .split('')
+      .reduce((acc, char) => acc + char.charCodeAt(0), 0);
+
+    const expectedOtc = String(
+      (window * 7919 + seed * 123) % 1000
+    ).padStart(3, '0');
+
+    if (otc !== expectedOtc) {
+      return c.json(
+        {
+          error: 'Invalid Code',
+        },
+        400,
+      );
     }
 
     const attendance = await getAttendanceById(attendance_id);
