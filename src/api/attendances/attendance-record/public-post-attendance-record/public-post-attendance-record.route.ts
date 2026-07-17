@@ -9,6 +9,7 @@ export const publicPostAttendanceRecordRoute = createRoute({
     query: z.object({
       attendance_id: z.string(),
       rfid: z.string(),
+      otc: z.string(),
     }),
   },
   responses: {

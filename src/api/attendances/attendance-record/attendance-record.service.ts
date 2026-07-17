@@ -3,6 +3,7 @@ import { DeleteAttendanceRecord, GetAttendanceRecord, PatchAttendanceRecord, Pos
 import { getDb } from "../../../config/db.config.js";
 import { GetAttendee } from "../attendees/attendees.model.js";
 import { GetAttendance } from "../attendance/attendance.model.js";
+import { broadcastToAttendance } from "../../../realtime/realtime.js";
 
 export const getAttendanceRecords = async (attendances_id: string): Promise<GetAttendanceRecord[]> => {
   try {
@@ -26,6 +27,23 @@ export const getAttendanceById = async (attendance_id: string): Promise<GetAtten
   }
 }
 
+export const setAttendanceOtc = async (
+  attendance_id: string,
+  otc_code: number,
+  otc_code_expires_at: string,
+): Promise<void> => {
+  try {
+    const db = getDb();
+    const collection = db.collection<GetAttendance>(COLLECTIONS.ATTENDANCE);
+    await collection.updateOne(
+      { id: attendance_id },
+      { $set: { otc_code, otc_code_expires_at, updated_at: new Date().toISOString() } },
+    );
+  } catch (error) {
+    throw new Error('Failed to set attendance OTC');
+  }
+}
+
 export const createAttendanceRecord = async (payload: PostAttendanceRecord): Promise<GetAttendanceRecord> => {
   try {
     const attendance = await getAttendanceById(payload.attendance_id);
@@ -42,6 +60,7 @@ export const createAttendanceRecord = async (payload: PostAttendanceRecord): Pro
     if (!result.acknowledged) {
       throw new Error('Failed to create attendance record');
     }
+    broadcastToAttendance(payload.attendances_id, 'record.created', payload);
     return payload;
   } catch (error) {
     if (error instanceof Error && (error.message === 'Attendance not found' || error.message === 'Attendance is inactive')) {
@@ -59,6 +78,7 @@ export const updateAttendanceRecord = async (id: string, payload: PatchAttendanc
     if (!result) {
       throw new Error('Failed to update attendance record');
     }
+    broadcastToAttendance(result.attendances_id, 'record.updated', result);
     return result;
   } catch (error) {
     throw new Error('Failed to update attendance record');

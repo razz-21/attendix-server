@@ -10,7 +10,7 @@ export const publicPostAttendanceRecordController = async (c: Context) => {
       return c.json({ error: 'Attendances ID is required' }, 400);
     }
 
-    const { rfid, attendance_id } = c.req.query();
+    const { rfid, attendance_id, otc  } = c.req.query();
     if (!rfid) {
       return c.json({ error: 'RFID is required' }, 400);
     }
@@ -19,14 +19,32 @@ export const publicPostAttendanceRecordController = async (c: Context) => {
       return c.json({ error: 'Attendance ID is required' }, 400);
     }
 
-    const attendee = await getAttendeeByRfid(rfid, attendances_id);
-    if (!attendee) {
-      return c.json({ error: 'Attendee not found' }, 404);
-    }
-
     const attendance = await getAttendanceById(attendance_id);
     if (!attendance) {
       return c.json({ error: 'Attendance not found' }, 404);
+    }
+
+    if (attendance.enable_otc === 'on') {
+      if (!otc) {
+        return c.json({ error: 'OTC is required' }, 400);
+      }
+
+      const hasOtc = attendance.otc_code !== undefined && attendance.otc_code !== null && !!attendance.otc_code_expires_at;
+      const expiresAt = attendance.otc_code_expires_at ? new Date(attendance.otc_code_expires_at).getTime() : NaN;
+
+      if (!hasOtc || Number.isNaN(expiresAt) || Date.now() > expiresAt) {
+        return c.json({ error: 'OTC has expired. Please enter the latest code.' }, 400);
+      }
+
+      const expectedOtc = String(attendance.otc_code).padStart(3, '0');
+      if (otc.trim() !== expectedOtc) {
+        return c.json({ error: 'Invalid OTC' }, 400);
+      }
+    }
+
+    const attendee = await getAttendeeByRfid(rfid, attendances_id);
+    if (!attendee) {
+      return c.json({ error: 'Attendee not found' }, 404);
     }
 
     if (attendance.attendances_id !== attendances_id) {
