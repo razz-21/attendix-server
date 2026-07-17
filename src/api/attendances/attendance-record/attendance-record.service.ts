@@ -26,6 +26,23 @@ export const getAttendanceById = async (attendance_id: string): Promise<GetAtten
   }
 }
 
+export const setAttendanceOtc = async (
+  attendance_id: string,
+  otc_code: number,
+  otc_code_expires_at: string,
+): Promise<void> => {
+  try {
+    const db = getDb();
+    const collection = db.collection<GetAttendance>(COLLECTIONS.ATTENDANCE);
+    await collection.updateOne(
+      { id: attendance_id },
+      { $set: { otc_code, otc_code_expires_at, updated_at: new Date().toISOString() } },
+    );
+  } catch (error) {
+    throw new Error('Failed to set attendance OTC');
+  }
+}
+
 export const createAttendanceRecord = async (payload: PostAttendanceRecord): Promise<GetAttendanceRecord> => {
   try {
     const attendance = await getAttendanceById(payload.attendance_id);

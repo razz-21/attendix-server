@@ -1,16 +1,30 @@
 import { Context } from "hono";
+import { getAttendanceById, setAttendanceOtc } from "../attendance-record/attendance-record.service.js";
+
+const OTC_TTL_SECONDS = 15;
 
 export async function getOtcController(c: Context) {
   try {
     const attendance_id = c.req.param('attendance_id') ?? '';
-    const now = Math.floor(Date.now() / 1000);
-    const window = Math.floor(now / 15);
-    
-    const seed = attendance_id.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
-    const otc = String((window * 7919 + seed * 123) % 1000).padStart(3, "0");
-    const expires_in = 15 - (now % 15);
+    if (!attendance_id) {
+      return c.json({ error: 'Attendance ID is required' }, 400);
+    }
 
-    return c.json({ otc, expires_in }, 200);
+    const attendance = await getAttendanceById(attendance_id);
+    if (!attendance) {
+      return c.json({ error: 'Attendance not found' }, 404);
+    }
+
+    // Generate a fresh 3-digit code and persist it with a short expiry window.
+    const otc_code = Math.floor(Math.random() * 1000);
+    const otc_code_expires_at = new Date(Date.now() + OTC_TTL_SECONDS * 1000).toISOString();
+
+    await setAttendanceOtc(attendance_id, otc_code, otc_code_expires_at);
+
+    return c.json({
+      otc: String(otc_code).padStart(3, '0'),
+      expires_in: OTC_TTL_SECONDS,
+    }, 200);
   } catch (error) {
     return c.json({ error: 'Failed to generate OTC' }, 500);
   }

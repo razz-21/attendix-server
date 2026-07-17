@@ -33,9 +33,17 @@ export const AttendanceSchema = z.object({
     description: 'The status of the attendance record',
     example: 'active',
   }),
-  session_state: z.enum(['on', 'off']).default('off').openapi({
+  enable_otc: z.enum(['on', 'off']).default('off').openapi({
     description: 'The on/off state of the attendance session',
     example: 'off',
+  }),
+  otc_code: z.int().optional().openapi({
+    description: 'The OTP code for the attendance session',
+    example: 123,
+  }),
+  otc_code_expires_at: z.string().datetime().optional().openapi({
+    description: 'The date and time the OTP code expires',
+    example: '2021-01-01T00:00:00.000Z',
   }),
   created_at: z.string().datetime().default(() => new Date().toISOString()).openapi({
     description: 'The date and time the record was created',
