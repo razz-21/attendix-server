@@ -25,7 +25,7 @@
     "typescript": "^5.8.3"
   },
   "scripts": {
-    "prepare": "husky",
+    "prepare": "husky || true",
     "dev": "tsx watch src/server.ts",
     "start": "node dist/server.js",
     "typecheck": "tsc --noEmit"
